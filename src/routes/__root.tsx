@@ -29,14 +29,18 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "TrailMate" },
+      { name: "description", content: "TrailMate Tunisia is a mobile app for discovering and navigating Tunisia's outdoor trails." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "TrailMate" },
+      { property: "og:description", content: "TrailMate Tunisia is a mobile app for discovering and navigating Tunisia's outdoor trails." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "TrailMate" },
+      { name: "twitter:description", content: "TrailMate Tunisia is a mobile app for discovering and navigating Tunisia's outdoor trails." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/696ce3ed-4702-40b1-bed2-47180c86922a/id-preview-86f1a201--617336e5-f102-48c8-87d6-f122d616a06e.lovable.app-1777934272524.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/696ce3ed-4702-40b1-bed2-47180c86922a/id-preview-86f1a201--617336e5-f102-48c8-87d6-f122d616a06e.lovable.app-1777934272524.png" },
     ],
     links: [
       {

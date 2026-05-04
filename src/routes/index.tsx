@@ -10,8 +10,19 @@ export const Route = createFileRoute("/")({
 
 function Onboarding() {
   const [step, setStep] = useState(0);
+  const [name, setName] = useState("");
+  const [level, setLevel] = useState("Intermediate");
+  const [region, setRegion] = useState("Northern Mountains");
   const navigate = useNavigate();
-  const next = () => (step < 2 ? setStep(step + 1) : navigate({ to: "/explore" }));
+  const next = () => {
+    if (step < 2) return setStep(step + 1);
+    try {
+      if (typeof window !== "undefined") {
+        localStorage.setItem("trailmate.profile", JSON.stringify({ name, level, region }));
+      }
+    } catch {}
+    navigate({ to: "/explore" });
+  };
 
   return (
     <div className="min-h-screen bg-background flex justify-center">

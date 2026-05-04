@@ -85,9 +85,9 @@ function AIGuide() {
 
         <div className="px-5 py-3 border-t border-border bg-background">
           <div className="flex items-center gap-2 bg-card rounded-2xl px-4 py-2">
-            <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send(input)} placeholder="Ask anything…" className="flex-1 bg-transparent outline-none text-sm" />
-            <button className="h-8 w-8 rounded-xl flex items-center justify-center text-primary"><Mic className="h-4 w-4" /></button>
-            <button onClick={()=>send(input)} className="h-8 w-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center"><Send className="h-4 w-4" /></button>
+            <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send(input)} placeholder={listening ? "Listening…" : "Ask anything…"} className="flex-1 bg-transparent outline-none text-sm" />
+            <button onClick={startListening} className={`h-8 w-8 rounded-xl flex items-center justify-center text-primary ${listening ? "animate-pulse bg-primary/10" : ""}`} aria-label="Voice"><Mic className="h-4 w-4" /></button>
+            <button onClick={()=>send(input)} className="h-8 w-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center" aria-label="Send"><Send className="h-4 w-4" /></button>
           </div>
         </div>
       </div>

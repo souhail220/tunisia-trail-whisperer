@@ -1,4 +1,4 @@
-import { Link, Outlet, useLocation } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { Compass, Route as RouteIcon, Bot, Users, User } from "lucide-react";
 
 const tabs = [
@@ -9,14 +9,12 @@ const tabs = [
   { to: "/profile", label: "Profile", icon: User },
 ] as const;
 
-export function MobileShell() {
+export function MobileShell({ children }: { children: React.ReactNode }) {
   const { pathname } = useLocation();
   return (
     <div className="min-h-screen bg-background flex justify-center">
       <div className="w-full max-w-[430px] min-h-screen relative bg-background border-x border-border/60">
-        <main className="pb-24">
-          <Outlet />
-        </main>
+        <div className="pb-24">{children}</div>
         <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-background/95 backdrop-blur border-t border-border z-50">
           <ul className="grid grid-cols-5">
             {tabs.map(({ to, label, icon: Icon }) => {

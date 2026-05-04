@@ -96,7 +96,9 @@ function Generate() {
           <p className="px-5 text-xs text-muted-foreground mb-3">3 routes matched your preferences</p>
           <div className="flex gap-3 overflow-x-auto no-scrollbar px-5 pb-2 snap-x">
             {trails.slice(0,3).map(t => (
-              <div key={t.id} className="snap-center min-w-[280px]"><TrailCard trail={t} compact /></div>
+              <Link key={t.id} to="/trail/$id" params={{ id: t.id }} className="snap-center min-w-[280px]">
+                <TrailCard trail={t} compact />
+              </Link>
             ))}
           </div>
           <div className="px-5 mt-6">

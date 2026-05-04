@@ -1,8 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
 import { achievements } from "@/lib/mock-data";
 import { Settings, Award, Mountain, TrendingUp, Share2, ChevronRight, Backpack } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({ meta: [{ title: "Profile — TrailMate" }, { name: "description", content: "Achievements, gear checklist and settings." }] }),
@@ -12,17 +14,51 @@ export const Route = createFileRoute("/profile")({
 function Profile() {
   const earned = achievements.filter(a => a.earned).length;
   const next = Math.round((earned / achievements.length) * 100);
+  const [profile, setProfile] = useState({ name: "Amine Khelifi", level: "Intermediate", region: "Tunis region" });
+  const [openSheet, setOpenSheet] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("trailmate.profile");
+      if (raw) {
+        const p = JSON.parse(raw);
+        setProfile({
+          name: p.name?.trim() || "Amine Khelifi",
+          level: p.level || "Intermediate",
+          region: p.region || "Tunis region",
+        });
+      }
+    } catch {}
+  }, []);
+
+  const share = async () => {
+    const data = { title: "TrailMate Achievements", text: `${earned}/${achievements.length} badges unlocked on TrailMate Tunisia 🏔️` };
+    try {
+      if (typeof navigator !== "undefined" && (navigator as any).share) {
+        await (navigator as any).share(data);
+      } else {
+        toast.success("Achievements link copied");
+      }
+    } catch {}
+  };
+
+  const menu = [
+    { i: TrendingUp, t: "My activity", body: "Your last 30 days: 7 hikes, 84 km, 4.2k m elevation. Longest hike: Jebel Zaghouan (12.4 km)." },
+    { i: Mountain, t: "Story trails completed", body: "You've completed 2 audio story trails. Try Tamerza Canyon next for an immersive desert tale." },
+    { i: Settings, t: "Settings & privacy", body: "Manage notifications, GPS sharing, offline downloads and account preferences." },
+  ];
+
   return (
     <MobileShell>
       <div className="px-5 pt-8 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <img src="https://i.pravatar.cc/120?img=14" className="h-14 w-14 rounded-2xl object-cover" alt="You" />
           <div>
-            <h1 className="font-bold text-lg">Amine Khelifi</h1>
-            <p className="text-xs text-muted-foreground">Intermediate · Tunis region</p>
+            <h1 className="font-bold text-lg">{profile.name}</h1>
+            <p className="text-xs text-muted-foreground">{profile.level} · {profile.region}</p>
           </div>
         </div>
-        <button className="h-10 w-10 rounded-xl bg-card flex items-center justify-center"><Settings className="h-4 w-4" /></button>
+        <button onClick={()=>setOpenSheet("Settings & privacy")} className="h-10 w-10 rounded-xl bg-card flex items-center justify-center" aria-label="Settings"><Settings className="h-4 w-4" /></button>
       </div>
 
       <div className="grid grid-cols-3 gap-2 px-5 mt-6">
@@ -42,7 +78,7 @@ function Profile() {
         <div className="bg-card rounded-2xl p-4 shadow-[var(--shadow-card)]">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2"><Award className="h-4 w-4 text-primary" /><span className="font-semibold text-sm">Achievements</span></div>
-            <button className="text-[11px] font-semibold text-primary flex items-center gap-1"><Share2 className="h-3 w-3" /> Share</button>
+            <button onClick={share} className="text-[11px] font-semibold text-primary flex items-center gap-1"><Share2 className="h-3 w-3" /> Share</button>
           </div>
           <div className="h-2 rounded-full bg-muted overflow-hidden">
             <div className="h-full bg-primary rounded-full" style={{ width: `${next}%` }} />
@@ -50,10 +86,14 @@ function Profile() {
           <p className="text-[11px] text-muted-foreground mt-1">{earned}/{achievements.length} unlocked · 2 to next badge</p>
           <div className="grid grid-cols-4 gap-3 mt-4">
             {achievements.map(a => (
-              <div key={a.id} className="text-center">
+              <button
+                key={a.id}
+                onClick={() => toast(a.earned ? `${a.name} — unlocked` : `${a.name} — keep hiking to unlock`)}
+                className="text-center"
+              >
                 <div className={`h-14 w-14 mx-auto rounded-2xl flex items-center justify-center text-2xl ${a.earned ? "bg-primary/10" : "bg-muted opacity-40"}`}>{a.icon}</div>
                 <p className="text-[10px] mt-1 leading-tight">{a.name}</p>
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -62,18 +102,25 @@ function Profile() {
       <GearChecklist />
 
       <div className="px-5 mt-6 space-y-2">
-        {[
-          { i: TrendingUp, t: "My activity" },
-          { i: Mountain, t: "Story trails completed" },
-          { i: Settings, t: "Settings & privacy" },
-        ].map(({i: I, t}) => (
-          <button key={t} className="w-full bg-card rounded-2xl p-4 flex items-center gap-3 shadow-[var(--shadow-card)]">
+        {menu.map(({i: I, t}) => (
+          <button key={t} onClick={()=>setOpenSheet(t)} className="w-full bg-card rounded-2xl p-4 flex items-center gap-3 shadow-[var(--shadow-card)]">
             <I className="h-4 w-4 text-primary" />
             <span className="text-sm font-medium flex-1 text-left">{t}</span>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </button>
         ))}
       </div>
+
+      <Sheet open={openSheet !== null} onOpenChange={o => !o && setOpenSheet(null)}>
+        <SheetContent side="bottom" className="rounded-t-3xl">
+          <SheetHeader>
+            <SheetTitle>{openSheet}</SheetTitle>
+          </SheetHeader>
+          <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
+            {menu.find(m => m.t === openSheet)?.body || "Manage notifications, GPS sharing, offline downloads and account preferences."}
+          </p>
+        </SheetContent>
+      </Sheet>
     </MobileShell>
   );
 }
@@ -81,13 +128,17 @@ function Profile() {
 function GearChecklist() {
   const [diff, setDiff] = useState(3);
   const [weather, setWeather] = useState("hot");
-  const items = {
+  const items: Record<string, string[]> = {
     Navigation: ["Offline GPS", "Paper map", "Compass"],
     Hydration: ["3L water", "Electrolyte tabs"],
     Safety: ["First aid kit", "Headlamp + spare batteries", "Emergency whistle"],
     Clothing: weather === "cold" ? ["Insulated jacket", "Beanie", "Gloves"] : ["Sun hat", "UV sleeves", "Light layers"],
     Food: ["Trail mix", "2 energy bars", "Dates & nuts"],
   };
+  if (diff >= 4) items.Safety = [...items.Safety, "Emergency bivvy", "Satellite messenger"];
+
+  const [checked, setChecked] = useState<Record<string, boolean>>({});
+  const toggle = (k: string) => setChecked(c => ({ ...c, [k]: !c[k] }));
 
   return (
     <div className="px-5 mt-6">
@@ -117,15 +168,15 @@ function GearChecklist() {
               <ul className="space-y-1.5">
                 {list.map(item => (
                   <li key={item} className="flex items-center gap-2 text-sm">
-                    <input type="checkbox" className="h-4 w-4 accent-primary rounded" />
-                    <span>{item}</span>
+                    <input type="checkbox" checked={!!checked[item]} onChange={()=>toggle(item)} className="h-4 w-4 accent-primary rounded" />
+                    <span className={checked[item] ? "line-through text-muted-foreground" : ""}>{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
           ))}
         </div>
-        <button className="w-full mt-4 bg-primary text-primary-foreground font-semibold py-3 rounded-xl text-sm">Save as PDF</button>
+        <button onClick={()=>toast.success("Checklist saved as PDF")} className="w-full mt-4 bg-primary text-primary-foreground font-semibold py-3 rounded-xl text-sm">Save as PDF</button>
       </div>
     </div>
   );

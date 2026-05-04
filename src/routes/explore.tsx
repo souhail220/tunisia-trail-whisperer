@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
 import { TrailCard } from "@/components/TrailCard";
 import { trails, guides } from "@/lib/mock-data";
 import { Search, SlidersHorizontal, MapPin, BadgeCheck, Star, Sparkles } from "lucide-react";
+import { toast } from "sonner";
 import mapBg from "@/assets/map-bg.jpg";
 
 export const Route = createFileRoute("/explore")({
@@ -15,6 +16,21 @@ const filters = ["All", "Easy", "Moderate", "Hard", "Expert", "< 5km", "Coast", 
 
 function ExplorePage() {
   const [active, setActive] = useState("All");
+  const [query, setQuery] = useState("");
+
+  const visible = useMemo(() => {
+    return trails.filter(t => {
+      if (query && !`${t.name} ${t.region}`.toLowerCase().includes(query.toLowerCase())) return false;
+      if (active === "All") return true;
+      if (["Easy","Moderate","Hard","Expert"].includes(active)) return t.difficulty === active;
+      if (active === "< 5km") return t.distanceKm < 5;
+      if (active === "Coast") return t.tags.includes("coast");
+      if (active === "Desert") return t.tags.includes("desert");
+      if (active === "Forest") return t.tags.includes("forest");
+      return true;
+    });
+  }, [active, query]);
+
   return (
     <MobileShell>
       <div>
@@ -24,8 +40,8 @@ function ExplorePage() {
           <div className="absolute top-0 left-0 right-0 px-5 pt-12">
             <div className="bg-background rounded-2xl shadow-[var(--shadow-card)] flex items-center gap-2 px-4 py-3">
               <Search className="h-4 w-4 text-muted-foreground" />
-              <input placeholder="Search trails, regions…" className="flex-1 bg-transparent outline-none text-sm" />
-              <button className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center">
+              <input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search trails, regions…" className="flex-1 bg-transparent outline-none text-sm" />
+              <button onClick={()=>toast("Advanced filters coming soon")} className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center">
                 <SlidersHorizontal className="h-4 w-4 text-primary" />
               </button>
             </div>
@@ -36,9 +52,9 @@ function ExplorePage() {
             </div>
           </div>
           {trails.slice(0,4).map((t,i) => (
-            <div key={t.id} className="absolute" style={{ top: `${30+i*15}%`, left: `${20+i*18}%` }}>
-              <div className="h-3 w-3 rounded-full bg-primary ring-4 ring-primary/20 animate-pulse" />
-            </div>
+            <Link key={t.id} to="/trail/$id" params={{ id: t.id }} className="absolute" style={{ top: `${30+i*15}%`, left: `${20+i*18}%` }}>
+              <span className="block h-3 w-3 rounded-full bg-primary ring-4 ring-primary/20 animate-pulse" />
+            </Link>
           ))}
         </div>
 
@@ -47,13 +63,21 @@ function ExplorePage() {
             <h2 className="font-bold text-lg">Trails near you</h2>
             <Link to="/routes" className="text-xs font-semibold text-primary">See all</Link>
           </div>
-          <div className="flex gap-3 overflow-x-auto no-scrollbar px-5 pb-2">
-            {trails.map(t => (
-              <Link key={t.id} to="/trail/$id" params={{ id: t.id }} className="block">
-                <TrailCard trail={t} compact />
-              </Link>
-            ))}
-          </div>
+          {visible.length === 0 ? (
+            <div className="mx-5 bg-card rounded-2xl p-6 text-center">
+              <p className="text-3xl">🔍</p>
+              <p className="font-semibold mt-2 text-sm">No trails match</p>
+              <button onClick={()=>{setQuery("");setActive("All");}} className="mt-3 text-xs font-semibold text-primary">Clear filters</button>
+            </div>
+          ) : (
+            <div className="flex gap-3 overflow-x-auto no-scrollbar px-5 pb-2">
+              {visible.map(t => (
+                <Link key={t.id} to="/trail/$id" params={{ id: t.id }} className="block">
+                  <TrailCard trail={t} compact />
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="mx-5 mt-6 rounded-3xl bg-gradient-to-br from-primary to-[oklch(0.38_0.18_290)] p-5 text-primary-foreground shadow-[var(--shadow-float)]">
@@ -66,7 +90,7 @@ function ExplorePage() {
         <div className="px-5 mt-8">
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-bold text-lg">Find a verified guide</h2>
-            <button className="text-xs font-semibold text-primary">Filters</button>
+            <button onClick={()=>toast("Guide filters coming soon")} className="text-xs font-semibold text-primary">Filters</button>
           </div>
           <div className="space-y-3">
             {guides.map(g => (
@@ -87,7 +111,7 @@ function ExplorePage() {
                 <div className="text-right">
                   <p className="font-bold text-primary">${g.pricePerDay}</p>
                   <p className="text-[10px] text-muted-foreground">per day</p>
-                  <button className="mt-2 text-[11px] font-semibold bg-primary text-primary-foreground px-3 py-1.5 rounded-full">Book</button>
+                  <button onClick={()=>toast.success(`Booking request sent to ${g.name}`)} className="mt-2 text-[11px] font-semibold bg-primary text-primary-foreground px-3 py-1.5 rounded-full">Book</button>
                 </div>
               </div>
             ))}

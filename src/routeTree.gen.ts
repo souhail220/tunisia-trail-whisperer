@@ -9,38 +9,175 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RoutesRouteImport } from './routes/routes'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as GenerateRouteImport } from './routes/generate'
+import { Route as ExploreRouteImport } from './routes/explore'
+import { Route as CommunityRouteImport } from './routes/community'
+import { Route as AiGuideRouteImport } from './routes/ai-guide'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TrailIdRouteImport } from './routes/trail.$id'
 
+const RoutesRoute = RoutesRouteImport.update({
+  id: '/routes',
+  path: '/routes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GenerateRoute = GenerateRouteImport.update({
+  id: '/generate',
+  path: '/generate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExploreRoute = ExploreRouteImport.update({
+  id: '/explore',
+  path: '/explore',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunityRoute = CommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiGuideRoute = AiGuideRouteImport.update({
+  id: '/ai-guide',
+  path: '/ai-guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TrailIdRoute = TrailIdRouteImport.update({
+  id: '/trail/$id',
+  path: '/trail/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ai-guide': typeof AiGuideRoute
+  '/community': typeof CommunityRoute
+  '/explore': typeof ExploreRoute
+  '/generate': typeof GenerateRoute
+  '/profile': typeof ProfileRoute
+  '/routes': typeof RoutesRoute
+  '/trail/$id': typeof TrailIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ai-guide': typeof AiGuideRoute
+  '/community': typeof CommunityRoute
+  '/explore': typeof ExploreRoute
+  '/generate': typeof GenerateRoute
+  '/profile': typeof ProfileRoute
+  '/routes': typeof RoutesRoute
+  '/trail/$id': typeof TrailIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/ai-guide': typeof AiGuideRoute
+  '/community': typeof CommunityRoute
+  '/explore': typeof ExploreRoute
+  '/generate': typeof GenerateRoute
+  '/profile': typeof ProfileRoute
+  '/routes': typeof RoutesRoute
+  '/trail/$id': typeof TrailIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/ai-guide'
+    | '/community'
+    | '/explore'
+    | '/generate'
+    | '/profile'
+    | '/routes'
+    | '/trail/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/ai-guide'
+    | '/community'
+    | '/explore'
+    | '/generate'
+    | '/profile'
+    | '/routes'
+    | '/trail/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/ai-guide'
+    | '/community'
+    | '/explore'
+    | '/generate'
+    | '/profile'
+    | '/routes'
+    | '/trail/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AiGuideRoute: typeof AiGuideRoute
+  CommunityRoute: typeof CommunityRoute
+  ExploreRoute: typeof ExploreRoute
+  GenerateRoute: typeof GenerateRoute
+  ProfileRoute: typeof ProfileRoute
+  RoutesRoute: typeof RoutesRoute
+  TrailIdRoute: typeof TrailIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/routes': {
+      id: '/routes'
+      path: '/routes'
+      fullPath: '/routes'
+      preLoaderRoute: typeof RoutesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/generate': {
+      id: '/generate'
+      path: '/generate'
+      fullPath: '/generate'
+      preLoaderRoute: typeof GenerateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/explore': {
+      id: '/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof ExploreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/community': {
+      id: '/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof CommunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-guide': {
+      id: '/ai-guide'
+      path: '/ai-guide'
+      fullPath: '/ai-guide'
+      preLoaderRoute: typeof AiGuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,21 +185,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/trail/$id': {
+      id: '/trail/$id'
+      path: '/trail/$id'
+      fullPath: '/trail/$id'
+      preLoaderRoute: typeof TrailIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AiGuideRoute: AiGuideRoute,
+  CommunityRoute: CommunityRoute,
+  ExploreRoute: ExploreRoute,
+  GenerateRoute: GenerateRoute,
+  ProfileRoute: ProfileRoute,
+  RoutesRoute: RoutesRoute,
+  TrailIdRoute: TrailIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

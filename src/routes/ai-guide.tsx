@@ -16,11 +16,21 @@ function AIGuide() {
   const [emergency, setEmergency] = useState(false);
   const [messages, setMessages] = useState(seedMessages);
   const [input, setInput] = useState("");
+  const [listening, setListening] = useState(false);
 
   const send = (text: string) => {
     if (!text.trim()) return;
     setMessages(m => [...m, { role: "user", text }, { role: "ai", text: cannedReply(text, emergency) }]);
     setInput("");
+  };
+
+  const startListening = () => {
+    if (listening) return;
+    setListening(true);
+    setTimeout(() => {
+      setListening(false);
+      setInput("How long to the summit?");
+    }, 1600);
   };
 
   return (

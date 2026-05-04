@@ -71,19 +71,19 @@ function Onboarding() {
               <div className="space-y-4 mt-6">
                 <div>
                   <label className="text-xs font-medium text-muted-foreground">Your name</label>
-                  <input className="w-full mt-1 px-4 py-3 rounded-xl bg-card border border-border focus:border-primary outline-none text-sm" placeholder="e.g. Amine" />
+                  <input value={name} onChange={e=>setName(e.target.value)} className="w-full mt-1 px-4 py-3 rounded-xl bg-card border border-border focus:border-primary outline-none text-sm" placeholder="e.g. Amine" />
                 </div>
                 <div>
                   <label className="text-xs font-medium text-muted-foreground">Experience level</label>
                   <div className="flex gap-2 mt-2">
                     {["Beginner", "Intermediate", "Expert"].map(l => (
-                      <button key={l} className="flex-1 px-3 py-2 rounded-full border border-border text-sm font-medium hover:bg-accent">{l}</button>
+                      <button key={l} onClick={()=>setLevel(l)} className={`flex-1 px-3 py-2 rounded-full border text-sm font-medium transition ${level===l ? "bg-primary text-primary-foreground border-primary" : "border-border hover:bg-accent"}`}>{l}</button>
                     ))}
                   </div>
                 </div>
                 <div>
                   <label className="text-xs font-medium text-muted-foreground">Preferred region</label>
-                  <select className="w-full mt-1 px-4 py-3 rounded-xl bg-card border border-border outline-none text-sm">
+                  <select value={region} onChange={e=>setRegion(e.target.value)} className="w-full mt-1 px-4 py-3 rounded-xl bg-card border border-border outline-none text-sm">
                     <option>Northern Mountains</option>
                     <option>Cap Bon & Coast</option>
                     <option>Atlas & Kasserine</option>

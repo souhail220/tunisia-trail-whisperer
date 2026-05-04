@@ -43,16 +43,16 @@ export const guides: Guide[] = [
 ];
 
 export type Post = {
-  id: string; user: string; avatar: string; trail: string; region: string;
+  id: string; user: string; avatar: string; trail: string; trailId: string; region: string;
   date: string; image: string; difficulty: Difficulty; likes: number; comments: number; hazard?: string;
 };
 
 export const posts: Post[] = [
-  { id: "p1", user: "Amine K.", avatar: "https://i.pravatar.cc/80?img=15", trail: "Jebel Zaghouan Summit", region: "Zaghouan", date: "2d ago", image: zaghouan, difficulty: "Hard", likes: 142, comments: 18 },
-  { id: "p2", user: "Yasmine B.", avatar: "https://i.pravatar.cc/80?img=23", trail: "Tamerza Oasis Loop", region: "Tozeur", date: "4d ago", image: tamerza, difficulty: "Moderate", likes: 98, comments: 12, hazard: "Flash flood risk after rain" },
-  { id: "p3", user: "Hatem M.", avatar: "https://i.pravatar.cc/80?img=11", trail: "Ain Draham Forest", region: "Jendouba", date: "1w ago", image: aindraham, difficulty: "Moderate", likes: 64, comments: 7 },
-  { id: "p4", user: "Lina S.", avatar: "https://i.pravatar.cc/80?img=45", trail: "Ichkeul Wetlands", region: "Bizerte", date: "1w ago", image: ichkeul, difficulty: "Easy", likes: 51, comments: 4 },
-  { id: "p5", user: "Walid T.", avatar: "https://i.pravatar.cc/80?img=52", trail: "Chaambi Expedition", region: "Kasserine", date: "2w ago", image: chaambi, difficulty: "Expert", likes: 211, comments: 34, hazard: "Restricted military zone — guide required" },
+  { id: "p1", user: "Amine K.", avatar: "https://i.pravatar.cc/80?img=15", trail: "Jebel Zaghouan Summit", trailId: "zaghouan", region: "Zaghouan", date: "2d ago", image: zaghouan, difficulty: "Hard", likes: 142, comments: 18 },
+  { id: "p2", user: "Yasmine B.", avatar: "https://i.pravatar.cc/80?img=23", trail: "Tamerza Oasis Loop", trailId: "tamerza", region: "Tozeur", date: "4d ago", image: tamerza, difficulty: "Moderate", likes: 98, comments: 12, hazard: "Flash flood risk after rain" },
+  { id: "p3", user: "Hatem M.", avatar: "https://i.pravatar.cc/80?img=11", trail: "Ain Draham Forest", trailId: "aindraham", region: "Jendouba", date: "1w ago", image: aindraham, difficulty: "Moderate", likes: 64, comments: 7 },
+  { id: "p4", user: "Lina S.", avatar: "https://i.pravatar.cc/80?img=45", trail: "Ichkeul Wetlands", trailId: "ichkeul", region: "Bizerte", date: "1w ago", image: ichkeul, difficulty: "Easy", likes: 51, comments: 4 },
+  { id: "p5", user: "Walid T.", avatar: "https://i.pravatar.cc/80?img=52", trail: "Chaambi Expedition", trailId: "chaambi", region: "Kasserine", date: "2w ago", image: chaambi, difficulty: "Expert", likes: 211, comments: 34, hazard: "Restricted military zone — guide required" },
 ];
 
 export const hazards = posts.filter(p => p.hazard);

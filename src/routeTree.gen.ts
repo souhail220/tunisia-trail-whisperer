@@ -17,6 +17,7 @@ import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AiGuideRouteImport } from './routes/ai-guide'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TrailIdRouteImport } from './routes/trail.$id'
+import { Route as HikeIdRouteImport } from './routes/hike.$id'
 
 const RoutesRoute = RoutesRouteImport.update({
   id: '/routes',
@@ -58,6 +59,11 @@ const TrailIdRoute = TrailIdRouteImport.update({
   path: '/trail/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HikeIdRoute = HikeIdRouteImport.update({
+  id: '/hike/$id',
+  path: '/hike/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/generate': typeof GenerateRoute
   '/profile': typeof ProfileRoute
   '/routes': typeof RoutesRoute
+  '/hike/$id': typeof HikeIdRoute
   '/trail/$id': typeof TrailIdRoute
 }
 export interface FileRoutesByTo {
@@ -77,6 +84,7 @@ export interface FileRoutesByTo {
   '/generate': typeof GenerateRoute
   '/profile': typeof ProfileRoute
   '/routes': typeof RoutesRoute
+  '/hike/$id': typeof HikeIdRoute
   '/trail/$id': typeof TrailIdRoute
 }
 export interface FileRoutesById {
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/generate': typeof GenerateRoute
   '/profile': typeof ProfileRoute
   '/routes': typeof RoutesRoute
+  '/hike/$id': typeof HikeIdRoute
   '/trail/$id': typeof TrailIdRoute
 }
 export interface FileRouteTypes {
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
     | '/generate'
     | '/profile'
     | '/routes'
+    | '/hike/$id'
     | '/trail/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -110,6 +120,7 @@ export interface FileRouteTypes {
     | '/generate'
     | '/profile'
     | '/routes'
+    | '/hike/$id'
     | '/trail/$id'
   id:
     | '__root__'
@@ -120,6 +131,7 @@ export interface FileRouteTypes {
     | '/generate'
     | '/profile'
     | '/routes'
+    | '/hike/$id'
     | '/trail/$id'
   fileRoutesById: FileRoutesById
 }
@@ -131,6 +143,7 @@ export interface RootRouteChildren {
   GenerateRoute: typeof GenerateRoute
   ProfileRoute: typeof ProfileRoute
   RoutesRoute: typeof RoutesRoute
+  HikeIdRoute: typeof HikeIdRoute
   TrailIdRoute: typeof TrailIdRoute
 }
 
@@ -192,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrailIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hike/$id': {
+      id: '/hike/$id'
+      path: '/hike/$id'
+      fullPath: '/hike/$id'
+      preLoaderRoute: typeof HikeIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -203,6 +223,7 @@ const rootRouteChildren: RootRouteChildren = {
   GenerateRoute: GenerateRoute,
   ProfileRoute: ProfileRoute,
   RoutesRoute: RoutesRoute,
+  HikeIdRoute: HikeIdRoute,
   TrailIdRoute: TrailIdRoute,
 }
 export const routeTree = rootRouteImport

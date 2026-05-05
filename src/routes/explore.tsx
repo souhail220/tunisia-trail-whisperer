@@ -42,7 +42,7 @@ function ExplorePage() {
               <Sparkles className="h-3.5 w-3.5" /> Recommended trip
             </div>
             <span className="text-[10px] font-semibold text-danger bg-danger/10 px-2 py-0.5 rounded-full animate-pulse">
-              Only 3 spots left
+              3 of 12 spots left
             </span>
           </div>
           <div className="relative rounded-3xl overflow-hidden shadow-[var(--shadow-float)]">

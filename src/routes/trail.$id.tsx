@@ -67,7 +67,7 @@ function TrailDetail() {
           </div>
         </button>
 
-        <button onClick={()=>toast.success(`Started: ${trail.name}`)} className="mt-6 w-full bg-primary text-primary-foreground font-semibold py-4 rounded-2xl shadow-[var(--shadow-float)] flex items-center justify-center gap-2">
+        <button onClick={()=>{toast.success(`Started: ${trail.name}`); router.navigate({ to: "/hike/$id", params: { id: trail.id } });}} className="mt-6 w-full bg-primary text-primary-foreground font-semibold py-4 rounded-2xl shadow-[var(--shadow-float)] flex items-center justify-center gap-2">
           <Play className="h-4 w-4 fill-current" /> Start hike
         </button>
       </div>

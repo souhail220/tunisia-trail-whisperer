@@ -37,25 +37,43 @@ function ExplorePage() {
     <MobileShell>
       <div>
         <div className="px-5 pt-10 pb-4">
-          <div className="flex items-center gap-2 text-[11px] font-semibold text-primary uppercase tracking-wide mb-2">
-            <Sparkles className="h-3.5 w-3.5" /> Recommended trip
-          </div>
-          <Link to="/trail/$id" params={{ id: featured.id }} className="block relative rounded-3xl overflow-hidden shadow-[var(--shadow-float)]">
-            <img src={featured.image} alt={featured.name} className="w-full h-56 object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-            <span className="absolute top-3 left-3 bg-primary text-primary-foreground text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
-              <Star className="h-3 w-3 fill-current" /> EDITOR'S PICK
-            </span>
-            <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-              <h2 className="font-bold text-xl leading-tight">{featured.name}</h2>
-              <p className="text-xs opacity-90 mt-0.5">{featured.region} · {featured.difficulty}</p>
-              <div className="flex items-center gap-4 mt-2 text-[11px]">
-                <span className="flex items-center gap-1"><Mountain className="h-3 w-3" />{featured.distanceKm} km</span>
-                <span className="flex items-center gap-1">↑ {featured.elevationM} m</span>
-                <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{featured.durationH}h</span>
-              </div>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2 text-[11px] font-semibold text-primary uppercase tracking-wide">
+              <Sparkles className="h-3.5 w-3.5" /> Recommended trip
             </div>
-          </Link>
+            <span className="text-[10px] font-semibold text-danger bg-danger/10 px-2 py-0.5 rounded-full animate-pulse">
+              Only 3 spots left
+            </span>
+          </div>
+          <div className="relative rounded-3xl overflow-hidden shadow-[var(--shadow-float)]">
+            <Link to="/trail/$id" params={{ id: featured.id }} className="block">
+              <img src={featured.image} alt={featured.name} className="w-full h-56 object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <span className="absolute top-3 left-3 bg-primary text-primary-foreground text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
+                <Star className="h-3 w-3 fill-current" /> EDITOR'S PICK
+              </span>
+              <div className="absolute top-3 right-3 bg-background/95 text-foreground text-[10px] font-semibold px-2.5 py-1 rounded-full">
+                3 / 12 left
+              </div>
+              <div className="absolute bottom-16 left-0 right-0 px-4 text-white">
+                <h2 className="font-bold text-xl leading-tight">{featured.name}</h2>
+                <p className="text-xs opacity-90 mt-0.5">{featured.region} · {featured.difficulty}</p>
+                <div className="flex items-center gap-4 mt-2 text-[11px]">
+                  <span className="flex items-center gap-1"><Mountain className="h-3 w-3" />{featured.distanceKm} km</span>
+                  <span className="flex items-center gap-1">↑ {featured.elevationM} m</span>
+                  <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{featured.durationH}h</span>
+                </div>
+              </div>
+            </Link>
+            <div className="absolute bottom-0 left-0 right-0 p-3 flex gap-2 bg-gradient-to-t from-black/90 to-transparent pt-8">
+              <Link to="/generate" className="flex-1 bg-primary text-primary-foreground text-xs font-semibold py-2.5 rounded-xl text-center">
+                Plan trip
+              </Link>
+              <button onClick={()=>toast.success(`Reserved your spot on ${featured.name}`)} className="flex-1 bg-background text-foreground text-xs font-semibold py-2.5 rounded-xl">
+                Reserve now
+              </button>
+            </div>
+          </div>
         </div>
 
         <div className="relative h-[420px]">

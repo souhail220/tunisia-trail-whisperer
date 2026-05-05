@@ -230,7 +230,7 @@ function ActiveHike() {
               ))}
             </div>
             <div className="mt-3 flex items-center gap-2 bg-background rounded-2xl px-3 py-2">
-              <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send(input)} placeholder="Ask your companion…" className="flex-1 bg-transparent outline-none text-sm" />
+              <input ref={inputRef} value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send(input)} placeholder="Ask your companion…" className="flex-1 bg-transparent outline-none text-sm" />
               <button onClick={()=>send(input)} className="h-8 w-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center" aria-label="Send"><Send className="h-4 w-4" /></button>
             </div>
           </div>

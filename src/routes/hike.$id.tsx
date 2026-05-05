@@ -39,6 +39,18 @@ function ActiveHike() {
   ]);
   const [input, setInput] = useState("");
   const chatRef = useRef<HTMLDivElement>(null);
+  const companionRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [companionActive, setCompanionActive] = useState(false);
+
+  const activateCompanion = () => {
+    setCompanionActive(true);
+    companionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => inputRef.current?.focus(), 400);
+    if (messages.length <= 1) {
+      setMessages(m => [...m, { role: "ai", text: "I'm right here with you. Ask me anything — pace, hydration, navigation, weather." }]);
+    }
+  };
 
   // simulated movement
   useEffect(() => {

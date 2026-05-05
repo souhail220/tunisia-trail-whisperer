@@ -175,6 +175,13 @@ function ActiveHike() {
               </div>
               <p className="text-[10px] text-muted-foreground mt-1">{progress.toFixed(0)}% complete</p>
             </div>
+            <button
+              onClick={activateCompanion}
+              className={`mt-3 w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-sm font-semibold transition-colors ${companionActive ? "bg-secondary/15 text-secondary border border-secondary/30" : "bg-primary text-primary-foreground"}`}
+            >
+              <Bot className="h-4 w-4" />
+              {companionActive ? "Companion active — tap to chat" : "Activate AI companion"}
+            </button>
           </div>
 
           {/* Checkpoint rewards list */}

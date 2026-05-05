@@ -207,7 +207,7 @@ function ActiveHike() {
           </div>
 
           {/* AI Companion */}
-          <div className="mt-5 bg-card rounded-3xl p-4 shadow-[var(--shadow-card)]">
+          <div ref={companionRef} className={`mt-5 bg-card rounded-3xl p-4 shadow-[var(--shadow-card)] transition-all ${companionActive ? "ring-2 ring-primary/40" : ""}`}>
             <div className="flex items-center gap-2 mb-3">
               <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Bot className="h-4 w-4 text-primary" />

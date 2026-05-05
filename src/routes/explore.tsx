@@ -2,8 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
 import { TrailCard } from "@/components/TrailCard";
-import { trails, guides } from "@/lib/mock-data";
-import { Search, SlidersHorizontal, MapPin, BadgeCheck, Star, Sparkles } from "lucide-react";
+import { trails } from "@/lib/mock-data";
+import { Search, SlidersHorizontal, Sparkles, Mountain, Clock, Star } from "lucide-react";
 import { toast } from "sonner";
 import mapBg from "@/assets/map-bg.jpg";
 

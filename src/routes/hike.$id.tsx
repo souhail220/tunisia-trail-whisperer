@@ -39,6 +39,18 @@ function ActiveHike() {
   ]);
   const [input, setInput] = useState("");
   const chatRef = useRef<HTMLDivElement>(null);
+  const companionRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [companionActive, setCompanionActive] = useState(false);
+
+  const activateCompanion = () => {
+    setCompanionActive(true);
+    companionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => inputRef.current?.focus(), 400);
+    if (messages.length <= 1) {
+      setMessages(m => [...m, { role: "ai", text: "I'm right here with you. Ask me anything — pace, hydration, navigation, weather." }]);
+    }
+  };
 
   // simulated movement
   useEffect(() => {
@@ -163,6 +175,13 @@ function ActiveHike() {
               </div>
               <p className="text-[10px] text-muted-foreground mt-1">{progress.toFixed(0)}% complete</p>
             </div>
+            <button
+              onClick={activateCompanion}
+              className={`mt-3 w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-sm font-semibold transition-colors ${companionActive ? "bg-secondary/15 text-secondary border border-secondary/30" : "bg-primary text-primary-foreground"}`}
+            >
+              <Bot className="h-4 w-4" />
+              {companionActive ? "Companion active — tap to chat" : "Activate AI companion"}
+            </button>
           </div>
 
           {/* Checkpoint rewards list */}
@@ -188,7 +207,7 @@ function ActiveHike() {
           </div>
 
           {/* AI Companion */}
-          <div className="mt-5 bg-card rounded-3xl p-4 shadow-[var(--shadow-card)]">
+          <div ref={companionRef} className={`mt-5 bg-card rounded-3xl p-4 shadow-[var(--shadow-card)] transition-all ${companionActive ? "ring-2 ring-primary/40" : ""}`}>
             <div className="flex items-center gap-2 mb-3">
               <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Bot className="h-4 w-4 text-primary" />
@@ -211,7 +230,7 @@ function ActiveHike() {
               ))}
             </div>
             <div className="mt-3 flex items-center gap-2 bg-background rounded-2xl px-3 py-2">
-              <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send(input)} placeholder="Ask your companion…" className="flex-1 bg-transparent outline-none text-sm" />
+              <input ref={inputRef} value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send(input)} placeholder="Ask your companion…" className="flex-1 bg-transparent outline-none text-sm" />
               <button onClick={()=>send(input)} className="h-8 w-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center" aria-label="Send"><Send className="h-4 w-4" /></button>
             </div>
           </div>

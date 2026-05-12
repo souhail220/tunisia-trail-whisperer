@@ -69,9 +69,9 @@ function ExplorePage() {
               <Link to="/generate" className="flex-1 bg-primary text-primary-foreground text-xs font-semibold py-2.5 rounded-xl text-center">
                 Plan trip
               </Link>
-              <button onClick={()=>toast.success(`Reserved your spot on ${featured.name}`)} className="flex-1 bg-background text-foreground text-xs font-semibold py-2.5 rounded-xl">
+              <Link to="/hike/$id" params={{ id: featured.id }} onClick={()=>toast.success(`Reserved your spot on ${featured.name}`)} className="flex-1 bg-background text-foreground text-xs font-semibold py-2.5 rounded-xl text-center">
                 Reserve now
-              </button>
+              </Link>
             </div>
           </div>
         </div>

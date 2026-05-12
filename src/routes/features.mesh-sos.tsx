@@ -4,7 +4,7 @@ import { FeatureShell } from "@/components/FeatureShell";
 import { Radio, Bluetooth, Wifi, WifiOff, Users } from "lucide-react";
 
 export const Route = createFileRoute("/features/mesh-sos")({
-  component: MeshSos;
+  component: MeshSos,
 });
 
 const peers = [

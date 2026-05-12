@@ -57,7 +57,8 @@ function FeaturesLayout() {
               <p className="text-[11px] text-muted-foreground mt-0.5">{d}</p>
             </div>
           </Link>
-        ))}
+          );
+        })}
       </div>
       <div className="px-5 mt-6">
         <Link to="/profile" className="bg-card rounded-2xl p-4 flex items-center gap-3 shadow-[var(--shadow-card)]">

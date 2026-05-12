@@ -12,12 +12,25 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as RoutesRouteImport } from './routes/routes'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as GenerateRouteImport } from './routes/generate'
+import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AiGuideRouteImport } from './routes/ai-guide'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TrailIdRouteImport } from './routes/trail.$id'
 import { Route as HikeIdRouteImport } from './routes/hike.$id'
+import { Route as FeaturesWildlifeRouteImport } from './routes/features.wildlife'
+import { Route as FeaturesThermalRouteImport } from './routes/features.thermal'
+import { Route as FeaturesStarpathRouteImport } from './routes/features.starpath'
+import { Route as FeaturesShareRouteRouteImport } from './routes/features.share-route'
+import { Route as FeaturesSafetyWatchRouteImport } from './routes/features.safety-watch'
+import { Route as FeaturesRouteArRouteImport } from './routes/features.route-ar'
+import { Route as FeaturesRadioRouteImport } from './routes/features.radio'
+import { Route as FeaturesOfflineEmergencyRouteImport } from './routes/features.offline-emergency'
+import { Route as FeaturesMeshSosRouteImport } from './routes/features.mesh-sos'
+import { Route as FeaturesGhostTrailRouteImport } from './routes/features.ghost-trail'
+import { Route as FeaturesGearRouteImport } from './routes/features.gear'
+import { Route as FeaturesCompanionRouteImport } from './routes/features.companion'
 
 const RoutesRoute = RoutesRouteImport.update({
   id: '/routes',
@@ -32,6 +45,11 @@ const ProfileRoute = ProfileRouteImport.update({
 const GenerateRoute = GenerateRouteImport.update({
   id: '/generate',
   path: '/generate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesRoute = FeaturesRouteImport.update({
+  id: '/features',
+  path: '/features',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExploreRoute = ExploreRouteImport.update({
@@ -64,15 +82,89 @@ const HikeIdRoute = HikeIdRouteImport.update({
   path: '/hike/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FeaturesWildlifeRoute = FeaturesWildlifeRouteImport.update({
+  id: '/wildlife',
+  path: '/wildlife',
+  getParentRoute: () => FeaturesRoute,
+} as any)
+const FeaturesThermalRoute = FeaturesThermalRouteImport.update({
+  id: '/thermal',
+  path: '/thermal',
+  getParentRoute: () => FeaturesRoute,
+} as any)
+const FeaturesStarpathRoute = FeaturesStarpathRouteImport.update({
+  id: '/starpath',
+  path: '/starpath',
+  getParentRoute: () => FeaturesRoute,
+} as any)
+const FeaturesShareRouteRoute = FeaturesShareRouteRouteImport.update({
+  id: '/share-route',
+  path: '/share-route',
+  getParentRoute: () => FeaturesRoute,
+} as any)
+const FeaturesSafetyWatchRoute = FeaturesSafetyWatchRouteImport.update({
+  id: '/safety-watch',
+  path: '/safety-watch',
+  getParentRoute: () => FeaturesRoute,
+} as any)
+const FeaturesRouteArRoute = FeaturesRouteArRouteImport.update({
+  id: '/route-ar',
+  path: '/route-ar',
+  getParentRoute: () => FeaturesRoute,
+} as any)
+const FeaturesRadioRoute = FeaturesRadioRouteImport.update({
+  id: '/radio',
+  path: '/radio',
+  getParentRoute: () => FeaturesRoute,
+} as any)
+const FeaturesOfflineEmergencyRoute =
+  FeaturesOfflineEmergencyRouteImport.update({
+    id: '/offline-emergency',
+    path: '/offline-emergency',
+    getParentRoute: () => FeaturesRoute,
+  } as any)
+const FeaturesMeshSosRoute = FeaturesMeshSosRouteImport.update({
+  id: '/mesh-sos',
+  path: '/mesh-sos',
+  getParentRoute: () => FeaturesRoute,
+} as any)
+const FeaturesGhostTrailRoute = FeaturesGhostTrailRouteImport.update({
+  id: '/ghost-trail',
+  path: '/ghost-trail',
+  getParentRoute: () => FeaturesRoute,
+} as any)
+const FeaturesGearRoute = FeaturesGearRouteImport.update({
+  id: '/gear',
+  path: '/gear',
+  getParentRoute: () => FeaturesRoute,
+} as any)
+const FeaturesCompanionRoute = FeaturesCompanionRouteImport.update({
+  id: '/companion',
+  path: '/companion',
+  getParentRoute: () => FeaturesRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/ai-guide': typeof AiGuideRoute
   '/community': typeof CommunityRoute
   '/explore': typeof ExploreRoute
+  '/features': typeof FeaturesRouteWithChildren
   '/generate': typeof GenerateRoute
   '/profile': typeof ProfileRoute
   '/routes': typeof RoutesRoute
+  '/features/companion': typeof FeaturesCompanionRoute
+  '/features/gear': typeof FeaturesGearRoute
+  '/features/ghost-trail': typeof FeaturesGhostTrailRoute
+  '/features/mesh-sos': typeof FeaturesMeshSosRoute
+  '/features/offline-emergency': typeof FeaturesOfflineEmergencyRoute
+  '/features/radio': typeof FeaturesRadioRoute
+  '/features/route-ar': typeof FeaturesRouteArRoute
+  '/features/safety-watch': typeof FeaturesSafetyWatchRoute
+  '/features/share-route': typeof FeaturesShareRouteRoute
+  '/features/starpath': typeof FeaturesStarpathRoute
+  '/features/thermal': typeof FeaturesThermalRoute
+  '/features/wildlife': typeof FeaturesWildlifeRoute
   '/hike/$id': typeof HikeIdRoute
   '/trail/$id': typeof TrailIdRoute
 }
@@ -81,9 +173,22 @@ export interface FileRoutesByTo {
   '/ai-guide': typeof AiGuideRoute
   '/community': typeof CommunityRoute
   '/explore': typeof ExploreRoute
+  '/features': typeof FeaturesRouteWithChildren
   '/generate': typeof GenerateRoute
   '/profile': typeof ProfileRoute
   '/routes': typeof RoutesRoute
+  '/features/companion': typeof FeaturesCompanionRoute
+  '/features/gear': typeof FeaturesGearRoute
+  '/features/ghost-trail': typeof FeaturesGhostTrailRoute
+  '/features/mesh-sos': typeof FeaturesMeshSosRoute
+  '/features/offline-emergency': typeof FeaturesOfflineEmergencyRoute
+  '/features/radio': typeof FeaturesRadioRoute
+  '/features/route-ar': typeof FeaturesRouteArRoute
+  '/features/safety-watch': typeof FeaturesSafetyWatchRoute
+  '/features/share-route': typeof FeaturesShareRouteRoute
+  '/features/starpath': typeof FeaturesStarpathRoute
+  '/features/thermal': typeof FeaturesThermalRoute
+  '/features/wildlife': typeof FeaturesWildlifeRoute
   '/hike/$id': typeof HikeIdRoute
   '/trail/$id': typeof TrailIdRoute
 }
@@ -93,9 +198,22 @@ export interface FileRoutesById {
   '/ai-guide': typeof AiGuideRoute
   '/community': typeof CommunityRoute
   '/explore': typeof ExploreRoute
+  '/features': typeof FeaturesRouteWithChildren
   '/generate': typeof GenerateRoute
   '/profile': typeof ProfileRoute
   '/routes': typeof RoutesRoute
+  '/features/companion': typeof FeaturesCompanionRoute
+  '/features/gear': typeof FeaturesGearRoute
+  '/features/ghost-trail': typeof FeaturesGhostTrailRoute
+  '/features/mesh-sos': typeof FeaturesMeshSosRoute
+  '/features/offline-emergency': typeof FeaturesOfflineEmergencyRoute
+  '/features/radio': typeof FeaturesRadioRoute
+  '/features/route-ar': typeof FeaturesRouteArRoute
+  '/features/safety-watch': typeof FeaturesSafetyWatchRoute
+  '/features/share-route': typeof FeaturesShareRouteRoute
+  '/features/starpath': typeof FeaturesStarpathRoute
+  '/features/thermal': typeof FeaturesThermalRoute
+  '/features/wildlife': typeof FeaturesWildlifeRoute
   '/hike/$id': typeof HikeIdRoute
   '/trail/$id': typeof TrailIdRoute
 }
@@ -106,9 +224,22 @@ export interface FileRouteTypes {
     | '/ai-guide'
     | '/community'
     | '/explore'
+    | '/features'
     | '/generate'
     | '/profile'
     | '/routes'
+    | '/features/companion'
+    | '/features/gear'
+    | '/features/ghost-trail'
+    | '/features/mesh-sos'
+    | '/features/offline-emergency'
+    | '/features/radio'
+    | '/features/route-ar'
+    | '/features/safety-watch'
+    | '/features/share-route'
+    | '/features/starpath'
+    | '/features/thermal'
+    | '/features/wildlife'
     | '/hike/$id'
     | '/trail/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -117,9 +248,22 @@ export interface FileRouteTypes {
     | '/ai-guide'
     | '/community'
     | '/explore'
+    | '/features'
     | '/generate'
     | '/profile'
     | '/routes'
+    | '/features/companion'
+    | '/features/gear'
+    | '/features/ghost-trail'
+    | '/features/mesh-sos'
+    | '/features/offline-emergency'
+    | '/features/radio'
+    | '/features/route-ar'
+    | '/features/safety-watch'
+    | '/features/share-route'
+    | '/features/starpath'
+    | '/features/thermal'
+    | '/features/wildlife'
     | '/hike/$id'
     | '/trail/$id'
   id:
@@ -128,9 +272,22 @@ export interface FileRouteTypes {
     | '/ai-guide'
     | '/community'
     | '/explore'
+    | '/features'
     | '/generate'
     | '/profile'
     | '/routes'
+    | '/features/companion'
+    | '/features/gear'
+    | '/features/ghost-trail'
+    | '/features/mesh-sos'
+    | '/features/offline-emergency'
+    | '/features/radio'
+    | '/features/route-ar'
+    | '/features/safety-watch'
+    | '/features/share-route'
+    | '/features/starpath'
+    | '/features/thermal'
+    | '/features/wildlife'
     | '/hike/$id'
     | '/trail/$id'
   fileRoutesById: FileRoutesById
@@ -140,6 +297,7 @@ export interface RootRouteChildren {
   AiGuideRoute: typeof AiGuideRoute
   CommunityRoute: typeof CommunityRoute
   ExploreRoute: typeof ExploreRoute
+  FeaturesRoute: typeof FeaturesRouteWithChildren
   GenerateRoute: typeof GenerateRoute
   ProfileRoute: typeof ProfileRoute
   RoutesRoute: typeof RoutesRoute
@@ -168,6 +326,13 @@ declare module '@tanstack/react-router' {
       path: '/generate'
       fullPath: '/generate'
       preLoaderRoute: typeof GenerateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features': {
+      id: '/features'
+      path: '/features'
+      fullPath: '/features'
+      preLoaderRoute: typeof FeaturesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/explore': {
@@ -212,14 +377,133 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HikeIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/features/wildlife': {
+      id: '/features/wildlife'
+      path: '/wildlife'
+      fullPath: '/features/wildlife'
+      preLoaderRoute: typeof FeaturesWildlifeRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
+    '/features/thermal': {
+      id: '/features/thermal'
+      path: '/thermal'
+      fullPath: '/features/thermal'
+      preLoaderRoute: typeof FeaturesThermalRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
+    '/features/starpath': {
+      id: '/features/starpath'
+      path: '/starpath'
+      fullPath: '/features/starpath'
+      preLoaderRoute: typeof FeaturesStarpathRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
+    '/features/share-route': {
+      id: '/features/share-route'
+      path: '/share-route'
+      fullPath: '/features/share-route'
+      preLoaderRoute: typeof FeaturesShareRouteRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
+    '/features/safety-watch': {
+      id: '/features/safety-watch'
+      path: '/safety-watch'
+      fullPath: '/features/safety-watch'
+      preLoaderRoute: typeof FeaturesSafetyWatchRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
+    '/features/route-ar': {
+      id: '/features/route-ar'
+      path: '/route-ar'
+      fullPath: '/features/route-ar'
+      preLoaderRoute: typeof FeaturesRouteArRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
+    '/features/radio': {
+      id: '/features/radio'
+      path: '/radio'
+      fullPath: '/features/radio'
+      preLoaderRoute: typeof FeaturesRadioRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
+    '/features/offline-emergency': {
+      id: '/features/offline-emergency'
+      path: '/offline-emergency'
+      fullPath: '/features/offline-emergency'
+      preLoaderRoute: typeof FeaturesOfflineEmergencyRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
+    '/features/mesh-sos': {
+      id: '/features/mesh-sos'
+      path: '/mesh-sos'
+      fullPath: '/features/mesh-sos'
+      preLoaderRoute: typeof FeaturesMeshSosRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
+    '/features/ghost-trail': {
+      id: '/features/ghost-trail'
+      path: '/ghost-trail'
+      fullPath: '/features/ghost-trail'
+      preLoaderRoute: typeof FeaturesGhostTrailRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
+    '/features/gear': {
+      id: '/features/gear'
+      path: '/gear'
+      fullPath: '/features/gear'
+      preLoaderRoute: typeof FeaturesGearRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
+    '/features/companion': {
+      id: '/features/companion'
+      path: '/companion'
+      fullPath: '/features/companion'
+      preLoaderRoute: typeof FeaturesCompanionRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
   }
 }
+
+interface FeaturesRouteChildren {
+  FeaturesCompanionRoute: typeof FeaturesCompanionRoute
+  FeaturesGearRoute: typeof FeaturesGearRoute
+  FeaturesGhostTrailRoute: typeof FeaturesGhostTrailRoute
+  FeaturesMeshSosRoute: typeof FeaturesMeshSosRoute
+  FeaturesOfflineEmergencyRoute: typeof FeaturesOfflineEmergencyRoute
+  FeaturesRadioRoute: typeof FeaturesRadioRoute
+  FeaturesRouteArRoute: typeof FeaturesRouteArRoute
+  FeaturesSafetyWatchRoute: typeof FeaturesSafetyWatchRoute
+  FeaturesShareRouteRoute: typeof FeaturesShareRouteRoute
+  FeaturesStarpathRoute: typeof FeaturesStarpathRoute
+  FeaturesThermalRoute: typeof FeaturesThermalRoute
+  FeaturesWildlifeRoute: typeof FeaturesWildlifeRoute
+}
+
+const FeaturesRouteChildren: FeaturesRouteChildren = {
+  FeaturesCompanionRoute: FeaturesCompanionRoute,
+  FeaturesGearRoute: FeaturesGearRoute,
+  FeaturesGhostTrailRoute: FeaturesGhostTrailRoute,
+  FeaturesMeshSosRoute: FeaturesMeshSosRoute,
+  FeaturesOfflineEmergencyRoute: FeaturesOfflineEmergencyRoute,
+  FeaturesRadioRoute: FeaturesRadioRoute,
+  FeaturesRouteArRoute: FeaturesRouteArRoute,
+  FeaturesSafetyWatchRoute: FeaturesSafetyWatchRoute,
+  FeaturesShareRouteRoute: FeaturesShareRouteRoute,
+  FeaturesStarpathRoute: FeaturesStarpathRoute,
+  FeaturesThermalRoute: FeaturesThermalRoute,
+  FeaturesWildlifeRoute: FeaturesWildlifeRoute,
+}
+
+const FeaturesRouteWithChildren = FeaturesRoute._addFileChildren(
+  FeaturesRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AiGuideRoute: AiGuideRoute,
   CommunityRoute: CommunityRoute,
   ExploreRoute: ExploreRoute,
+  FeaturesRoute: FeaturesRouteWithChildren,
   GenerateRoute: GenerateRoute,
   ProfileRoute: ProfileRoute,
   RoutesRoute: RoutesRoute,

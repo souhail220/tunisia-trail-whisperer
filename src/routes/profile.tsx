@@ -1,8 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
 import { achievements } from "@/lib/mock-data";
-import { Settings, Award, Mountain, TrendingUp, Share2, ChevronRight, Backpack } from "lucide-react";
+import { Settings, Award, Mountain, TrendingUp, Share2, ChevronRight, Backpack, Sparkles } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { toast } from "sonner";
 
@@ -102,6 +102,14 @@ function Profile() {
       <GearChecklist />
 
       <div className="px-5 mt-6 space-y-2">
+        <Link to="/features" className="w-full bg-primary text-primary-foreground rounded-2xl p-4 flex items-center gap-3 shadow-[var(--shadow-float)]">
+          <Sparkles className="h-4 w-4" />
+          <div className="flex-1 text-left">
+            <p className="text-sm font-bold">Explore 12 advanced features</p>
+            <p className="text-[11px] opacity-90">Safety Watch · Mesh SOS · AR · Wildlife ID & more</p>
+          </div>
+          <ChevronRight className="h-4 w-4" />
+        </Link>
         {menu.map(({i: I, t}) => (
           <button key={t} onClick={()=>setOpenSheet(t)} className="w-full bg-card rounded-2xl p-4 flex items-center gap-3 shadow-[var(--shadow-card)]">
             <I className="h-4 w-4 text-primary" />

@@ -1,0 +1,63 @@
+import { createFileRoute, Link, Outlet, useMatches } from "@tanstack/react-router";
+import { MobileShell } from "@/components/MobileShell";
+import {
+  ShieldAlert, LifeBuoy, Radio, Map, Headphones, Backpack, Bot,
+  Share2, Footprints, Leaf, Star, ThermometerSun, ChevronRight, Sparkles,
+} from "lucide-react";
+
+export const Route = createFileRoute("/features")({
+  head: () => ({ meta: [{ title: "Features — TrailMate" }, { name: "description", content: "Advanced safety, navigation and AI features for hikers." }] }),
+  component: FeaturesLayout,
+});
+
+const features = [
+  { to: "/features/safety-watch", t: "AI Safety Watch", d: "Auto fall & inactivity detection", i: ShieldAlert, c: "danger" },
+  { to: "/features/offline-emergency", t: "Offline Emergency", d: "Step-by-step offline guide", i: LifeBuoy, c: "warning" },
+  { to: "/features/mesh-sos", t: "Mesh SOS Network", d: "Bluetooth SOS relay", i: Radio, c: "danger" },
+  { to: "/features/route-ar", t: "AR Route Generator", d: "AI route + AR navigation", i: Map, c: "primary" },
+  { to: "/features/radio", t: "RadioMode Walkie-Talkie", d: "Push-to-talk over BT/WiFi", i: Headphones, c: "primary" },
+  { to: "/features/gear", t: "Smart Gear Checklist", d: "AI packing list", i: Backpack, c: "secondary" },
+  { to: "/features/companion", t: "AI Hiking Companion", d: "Real-time pace & safety AI", i: Bot, c: "primary" },
+  { to: "/features/share-route", t: "Enhanced Route Sharing", d: "Upload geotagged trails", i: Share2, c: "secondary" },
+  { to: "/features/ghost-trail", t: "GhostTrail Footprints", d: "Encrypted breadcrumbs", i: Footprints, c: "primary" },
+  { to: "/features/wildlife", t: "WildlifeID Lens", d: "Offline species ID", i: Leaf, c: "secondary" },
+  { to: "/features/starpath", t: "StarPath Night Navigator", d: "Constellation compass", i: Star, c: "primary" },
+  { to: "/features/thermal", t: "ThermalRisk Scanner", d: "Heatstroke risk score", i: ThermometerSun, c: "warning" },
+] as const;
+
+function FeaturesLayout() {
+  const matches = useMatches();
+  const isChild = matches.some(m => m.routeId.startsWith("/features/") && m.routeId !== "/features");
+  if (isChild) return <Outlet />;
+
+  return (
+    <MobileShell>
+      <div className="px-5 pt-8">
+        <div className="flex items-center gap-2">
+          <Sparkles className="h-5 w-5 text-primary" />
+          <h1 className="font-bold text-2xl">Features</h1>
+        </div>
+        <p className="text-xs text-muted-foreground mt-1">12 advanced modules — safety, navigation, offline AI.</p>
+      </div>
+      <div className="px-5 mt-5 grid grid-cols-2 gap-3">
+        {features.map(({ to, t, d, i: I, c }) => (
+          <Link key={to} to={to} className="bg-card rounded-2xl p-3 shadow-[var(--shadow-card)] flex flex-col gap-2 active:scale-[.98] transition-transform">
+            <div className={`h-10 w-10 rounded-xl flex items-center justify-center bg-${c}/10`}>
+              <I className={`h-5 w-5 text-${c}`} />
+            </div>
+            <div>
+              <p className="text-sm font-bold leading-tight">{t}</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5">{d}</p>
+            </div>
+          </Link>
+        ))}
+      </div>
+      <div className="px-5 mt-6">
+        <Link to="/profile" className="bg-card rounded-2xl p-4 flex items-center gap-3 shadow-[var(--shadow-card)]">
+          <span className="text-sm font-medium flex-1">Back to profile</span>
+          <ChevronRight className="h-4 w-4 text-muted-foreground" />
+        </Link>
+      </div>
+    </MobileShell>
+  );
+}

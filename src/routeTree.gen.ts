@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as RoutesRouteImport } from './routes/routes'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as GenerateRouteImport } from './routes/generate'
+import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AiGuideRouteImport } from './routes/ai-guide'
@@ -32,6 +33,11 @@ const ProfileRoute = ProfileRouteImport.update({
 const GenerateRoute = GenerateRouteImport.update({
   id: '/generate',
   path: '/generate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesRoute = FeaturesRouteImport.update({
+  id: '/features',
+  path: '/features',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExploreRoute = ExploreRouteImport.update({
@@ -70,6 +76,7 @@ export interface FileRoutesByFullPath {
   '/ai-guide': typeof AiGuideRoute
   '/community': typeof CommunityRoute
   '/explore': typeof ExploreRoute
+  '/features': typeof FeaturesRoute
   '/generate': typeof GenerateRoute
   '/profile': typeof ProfileRoute
   '/routes': typeof RoutesRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/ai-guide': typeof AiGuideRoute
   '/community': typeof CommunityRoute
   '/explore': typeof ExploreRoute
+  '/features': typeof FeaturesRoute
   '/generate': typeof GenerateRoute
   '/profile': typeof ProfileRoute
   '/routes': typeof RoutesRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/ai-guide': typeof AiGuideRoute
   '/community': typeof CommunityRoute
   '/explore': typeof ExploreRoute
+  '/features': typeof FeaturesRoute
   '/generate': typeof GenerateRoute
   '/profile': typeof ProfileRoute
   '/routes': typeof RoutesRoute
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/ai-guide'
     | '/community'
     | '/explore'
+    | '/features'
     | '/generate'
     | '/profile'
     | '/routes'
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/ai-guide'
     | '/community'
     | '/explore'
+    | '/features'
     | '/generate'
     | '/profile'
     | '/routes'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/ai-guide'
     | '/community'
     | '/explore'
+    | '/features'
     | '/generate'
     | '/profile'
     | '/routes'
@@ -140,6 +152,7 @@ export interface RootRouteChildren {
   AiGuideRoute: typeof AiGuideRoute
   CommunityRoute: typeof CommunityRoute
   ExploreRoute: typeof ExploreRoute
+  FeaturesRoute: typeof FeaturesRoute
   GenerateRoute: typeof GenerateRoute
   ProfileRoute: typeof ProfileRoute
   RoutesRoute: typeof RoutesRoute
@@ -168,6 +181,13 @@ declare module '@tanstack/react-router' {
       path: '/generate'
       fullPath: '/generate'
       preLoaderRoute: typeof GenerateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features': {
+      id: '/features'
+      path: '/features'
+      fullPath: '/features'
+      preLoaderRoute: typeof FeaturesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/explore': {
@@ -220,6 +240,7 @@ const rootRouteChildren: RootRouteChildren = {
   AiGuideRoute: AiGuideRoute,
   CommunityRoute: CommunityRoute,
   ExploreRoute: ExploreRoute,
+  FeaturesRoute: FeaturesRoute,
   GenerateRoute: GenerateRoute,
   ProfileRoute: ProfileRoute,
   RoutesRoute: RoutesRoute,
@@ -229,12 +250,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

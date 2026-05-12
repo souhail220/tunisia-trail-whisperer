@@ -40,10 +40,17 @@ function FeaturesLayout() {
         <p className="text-xs text-muted-foreground mt-1">12 advanced modules — safety, navigation, offline AI.</p>
       </div>
       <div className="px-5 mt-5 grid grid-cols-2 gap-3">
-        {features.map(({ to, t, d, i: I, c }) => (
+        {features.map(({ to, t, d, i: I, c }) => {
+          const tone = {
+            danger: "bg-danger/10 text-danger",
+            warning: "bg-warning/15 text-warning-foreground",
+            primary: "bg-primary/10 text-primary",
+            secondary: "bg-secondary/10 text-secondary",
+          }[c];
+          return (
           <Link key={to} to={to} className="bg-card rounded-2xl p-3 shadow-[var(--shadow-card)] flex flex-col gap-2 active:scale-[.98] transition-transform">
-            <div className={`h-10 w-10 rounded-xl flex items-center justify-center bg-${c}/10`}>
-              <I className={`h-5 w-5 text-${c}`} />
+            <div className={`h-10 w-10 rounded-xl flex items-center justify-center ${tone}`}>
+              <I className="h-5 w-5" />
             </div>
             <div>
               <p className="text-sm font-bold leading-tight">{t}</p>

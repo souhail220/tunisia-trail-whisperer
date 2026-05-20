@@ -3,7 +3,9 @@ import { useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
 import { trails } from "@/lib/mock-data";
 import { TrailCard } from "@/components/TrailCard";
-import { ChevronLeft, Sparkles } from "lucide-react";
+import { ChevronLeft, Sparkles, Map } from "lucide-react";
+import { AROverlaySheet, GearChecklistSheet } from "@/components/feature-sheets";
+
 
 export const Route = createFileRoute("/generate")({
   head: () => ({ meta: [{ title: "AI Route Generator — TrailMate" }, { name: "description", content: "Generate a perfect Tunisian hike with AI." }] }),

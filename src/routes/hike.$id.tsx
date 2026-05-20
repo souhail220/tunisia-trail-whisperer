@@ -128,18 +128,30 @@ function ActiveHike() {
   return (
     <MobileShell>
       <div className="relative">
+        <ThermalStrip region={trail.region} onClick={()=>setThermalOpen(true)} />
         {/* Map */}
         <div className="relative h-[340px] overflow-hidden">
           <img src={mapBg} alt="Hike map" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background" />
 
-          <button onClick={() => router.history.back()} className="absolute top-6 left-5 h-10 w-10 rounded-2xl bg-background/95 flex items-center justify-center z-10" aria-label="Back">
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <div className="absolute top-6 right-5 bg-background/95 rounded-2xl px-3 py-2 z-10 flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-primary" />
-            <span className="text-xs font-bold">{xp} XP</span>
+          <div className="absolute top-6 left-5 flex items-center gap-2 z-10">
+            <button onClick={() => router.history.back()} className="h-10 w-10 rounded-2xl bg-background/95 flex items-center justify-center" aria-label="Back">
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button onClick={()=>setEmergencyOpen(true)} className="h-10 w-10 rounded-2xl bg-background/95 border-2 border-danger/60 text-danger flex items-center justify-center" aria-label="Emergency">
+              <LifeBuoy className="h-5 w-5" />
+            </button>
           </div>
+          <div className="absolute top-6 right-5 z-10 flex items-center gap-2">
+            <span className="bg-danger/90 text-danger-foreground text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1">
+              <Footprints className="h-3 w-3" />● Recording trail
+            </span>
+            <div className="bg-background/95 rounded-2xl px-3 py-2 flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <span className="text-xs font-bold">{xp} XP</span>
+            </div>
+          </div>
+
 
           {/* Path line */}
           <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">

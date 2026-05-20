@@ -19,6 +19,8 @@ const filters = ["All", "Easy", "Moderate", "Hard", "Expert", "< 5km", "Coast", 
 function ExplorePage() {
   const [active, setActive] = useState("All");
   const [query, setQuery] = useState("");
+  const [gearOpen, setGearOpen] = useState(false);
+
 
   const visible = useMemo(() => {
     return trails.filter(t => {

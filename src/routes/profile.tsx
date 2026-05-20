@@ -17,6 +17,9 @@ function Profile() {
   const next = Math.round((earned / achievements.length) * 100);
   const [profile, setProfile] = useState({ name: "Amine Khelifi", level: "Intermediate", region: "Tunis region" });
   const [openSheet, setOpenSheet] = useState<string | null>(null);
+  const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbTrail[]>(seedBreadcrumbs);
+  const [journal, setJournal] = useState<JournalEntry[]>(seedJournal);
+
 
   useEffect(() => {
     try {

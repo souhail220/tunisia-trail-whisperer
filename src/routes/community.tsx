@@ -19,6 +19,8 @@ function Community() {
   const [liked, setLiked] = useState<Record<string, boolean>>({});
   const [saved, setSaved] = useState<Record<string, boolean>>({});
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [radioOpen, setRadioOpen] = useState(false);
+
 
   const toggleLike = (id: string) => {
     setLiked(l => ({ ...l, [id]: !l[id] }));

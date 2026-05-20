@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
-import { achievements } from "@/lib/mock-data";
-import { Settings, Award, Mountain, TrendingUp, Share2, ChevronRight, Backpack, Sparkles } from "lucide-react";
+import { achievements, seedBreadcrumbs, seedJournal, species as allSpecies, type BreadcrumbTrail, type JournalEntry } from "@/lib/mock-data";
+import { Settings, Award, Mountain, TrendingUp, Share2, ChevronRight, Backpack, Sparkles, Footprints, Leaf, Key } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { toast } from "sonner";
+
 
 export const Route = createFileRoute("/profile")({
   head: () => ({ meta: [{ title: "Profile — TrailMate" }, { name: "description", content: "Achievements, gear checklist and settings." }] }),

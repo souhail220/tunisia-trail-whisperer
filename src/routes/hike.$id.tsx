@@ -1,14 +1,16 @@
 import { createFileRoute, notFound, useRouter, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
-import { trails } from "@/lib/mock-data";
-import { ChevronLeft, MapPin, Flag, Trophy, Bot, Send, Pause, Play, CheckCircle2, Sparkles, Navigation } from "lucide-react";
+import { trails, thermalRiskFor } from "@/lib/mock-data";
+import { ChevronLeft, MapPin, Flag, Trophy, Bot, Send, Pause, Play, CheckCircle2, Sparkles, Navigation, ChevronDown, Star, LifeBuoy, Footprints } from "lucide-react";
 import { toast } from "sonner";
 import mapBg from "@/assets/map-bg.jpg";
+import { SafetyWatchPanel, MeshSOSSheet, OfflineEmergencySheet, StarPathSheet, ThermalStrip, ThermalRiskSheet } from "@/components/feature-sheets";
 
 export const Route = createFileRoute("/hike/$id")({
   component: ActiveHike,
 });
+
 
 type Checkpoint = { id: string; name: string; km: number; reward: string; xp: number; pos: { top: string; left: string } };
 

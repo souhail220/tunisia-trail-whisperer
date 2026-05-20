@@ -30,7 +30,7 @@ function FeaturesLayout() {
           <Sparkles className="h-5 w-5 text-primary" />
           <h1 className="font-bold text-2xl">Features</h1>
         </div>
-        <p className="text-xs text-muted-foreground mt-1">12 advanced modules — safety, navigation, offline AI.</p>
+        <p className="text-xs text-muted-foreground mt-1">4 advanced modules — navigation & discovery.</p>
       </div>
       <div className="px-5 mt-5 grid grid-cols-2 gap-3">
         {features.map(({ to, t, d, i: I, c }) => {

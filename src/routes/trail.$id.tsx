@@ -18,6 +18,12 @@ function TrailDetail() {
   if (!trail) throw notFound();
 
   const [saved, setSaved] = useState(false);
+  const [thermalOpen, setThermalOpen] = useState(false);
+  const [gearOpen, setGearOpen] = useState(false);
+  const [arOpen, setArOpen] = useState(false);
+  const risk = thermalRiskFor(trail.region);
+  const riskTone = risk.level === "high" ? "bg-danger/10 text-danger" : risk.level === "moderate" ? "bg-warning/20 text-warning-foreground" : "bg-success/15 text-success";
+
 
   const back = () => {
     if (typeof window !== "undefined" && window.history.length > 1) router.history.back();

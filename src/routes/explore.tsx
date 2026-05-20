@@ -130,11 +130,17 @@ function ExplorePage() {
           ) : (
             <div className="flex gap-3 overflow-x-auto no-scrollbar px-5 pb-2">
               {visible.map(t => (
-                <Link key={t.id} to="/trail/$id" params={{ id: t.id }} className="block">
-                  <TrailCard trail={t} compact />
-                </Link>
+                <div key={t.id} className="relative">
+                  <Link to="/trail/$id" params={{ id: t.id }} className="block">
+                    <TrailCard trail={t} compact />
+                  </Link>
+                  <div className="absolute top-2 right-10">
+                    <ThermalPill region={t.region} />
+                  </div>
+                </div>
               ))}
             </div>
+
           )}
         </div>
 

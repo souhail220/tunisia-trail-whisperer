@@ -207,14 +207,21 @@ function ActiveHike() {
               </div>
               <p className="text-[10px] text-muted-foreground mt-1">{progress.toFixed(0)}% complete</p>
             </div>
-            <button
-              onClick={activateCompanion}
-              className={`mt-3 w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-sm font-semibold transition-colors ${companionActive ? "bg-secondary/15 text-secondary border border-secondary/30" : "bg-primary text-primary-foreground"}`}
-            >
-              <Bot className="h-4 w-4" />
-              {companionActive ? "Companion active — tap to chat" : "Activate AI companion"}
-            </button>
+            <div className="grid grid-cols-2 gap-2 mt-3">
+              <button onClick={toggleCompanion} className="flex items-center justify-center gap-2 py-2.5 rounded-2xl text-xs font-semibold bg-primary text-primary-foreground">
+                <Bot className="h-4 w-4" />{companionOpen ? "Hide companion" : "AI companion"}
+              </button>
+              <button onClick={()=>setStarOpen(true)} className="flex items-center justify-center gap-2 py-2.5 rounded-2xl text-xs font-semibold bg-card border border-border opacity-60">
+                <Star className="h-4 w-4" />StarPath
+              </button>
+            </div>
           </div>
+
+          {/* AI Safety Watch panel */}
+          <div className="mt-4">
+            <SafetyWatchPanel onSOS={()=>setMeshOpen(true)} />
+          </div>
+
 
           {/* Checkpoint rewards list */}
           <div className="mt-4">

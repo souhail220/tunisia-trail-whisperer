@@ -35,6 +35,14 @@ function Community() {
     <MobileShell>
       <PageHeader title="Community" subtitle="Trails, photos & hazards" />
 
+      <div className="px-5 mb-3">
+        <button onClick={()=>setRadioOpen(true)} className="w-full bg-primary/10 text-primary rounded-2xl px-4 py-2.5 flex items-center justify-between">
+          <span className="flex items-center gap-2 text-xs font-bold"><Headphones className="h-4 w-4" />📡 Open channel · Trailheads</span>
+          <span className="text-[10px] font-semibold opacity-80">12 hikers connected</span>
+        </button>
+      </div>
+
+
       <div className="px-5 space-y-2 mb-4">
         {hazards.map(h => {
           const open = expanded === h.id;

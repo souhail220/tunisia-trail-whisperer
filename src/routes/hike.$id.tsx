@@ -1,7 +1,7 @@
 import { createFileRoute, notFound, useRouter, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
-import { trails, thermalRiskFor } from "@/lib/mock-data";
+import { trails } from "@/lib/mock-data";
 import { ChevronLeft, MapPin, Flag, Trophy, Bot, Send, Pause, Play, CheckCircle2, Sparkles, Navigation, ChevronDown, Star, LifeBuoy, Footprints } from "lucide-react";
 import { toast } from "sonner";
 import mapBg from "@/assets/map-bg.jpg";

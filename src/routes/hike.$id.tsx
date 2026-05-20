@@ -290,9 +290,15 @@ function ActiveHike() {
           <Link to="/ai-guide" className="mt-3 mb-4 block text-center text-xs font-semibold text-primary">Open full AI Guide →</Link>
         </div>
       </div>
+
+      <MeshSOSSheet open={meshOpen} onOpenChange={setMeshOpen} />
+      <OfflineEmergencySheet open={emergencyOpen} onOpenChange={setEmergencyOpen} />
+      <StarPathSheet open={starOpen} onOpenChange={setStarOpen} />
+      <ThermalRiskSheet open={thermalOpen} onOpenChange={setThermalOpen} region={trail.region} />
     </MobileShell>
   );
 }
+
 
 function Mini({ v, l }: { v: string; l: string }) {
   return (

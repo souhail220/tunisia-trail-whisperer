@@ -3,9 +3,11 @@ import { useMemo, useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
 import { TrailCard } from "@/components/TrailCard";
 import { trails } from "@/lib/mock-data";
-import { Search, SlidersHorizontal, Sparkles, Mountain, Clock, Star } from "lucide-react";
+import { Search, SlidersHorizontal, Sparkles, Mountain, Clock, Star, Backpack } from "lucide-react";
 import { toast } from "sonner";
 import mapBg from "@/assets/map-bg.jpg";
+import { ThermalPill, WildlifeChips, GearChecklistSheet } from "@/components/feature-sheets";
+
 
 export const Route = createFileRoute("/explore")({
   head: () => ({ meta: [{ title: "Explore — TrailMate Tunisia" }, { name: "description", content: "Discover Tunisian trails on an interactive map." }] }),

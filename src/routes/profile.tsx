@@ -31,9 +31,20 @@ function Profile() {
           level: p.level || "Intermediate",
           region: p.region || "Tunis region",
         });
+        if (Array.isArray(p.breadcrumbs)) setBreadcrumbs(p.breadcrumbs);
+        if (Array.isArray(p.journal)) setJournal(p.journal);
       }
     } catch {}
   }, []);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("trailmate.profile");
+      const base = raw ? JSON.parse(raw) : {};
+      localStorage.setItem("trailmate.profile", JSON.stringify({ ...base, breadcrumbs, journal }));
+    } catch {}
+  }, [breadcrumbs, journal]);
+
 
   const share = async () => {
     const data = { title: "TrailMate Achievements", text: `${earned}/${achievements.length} badges unlocked on TrailMate Tunisia 🏔️` };

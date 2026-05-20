@@ -1,9 +1,9 @@
 import { createFileRoute, Link, Outlet, useMatches } from "@tanstack/react-router";
 import { MobileShell } from "@/components/MobileShell";
 import {
-  ShieldAlert, LifeBuoy, Radio, Map, Headphones, Backpack, Bot,
-  Share2, Footprints, Leaf, Star, ThermometerSun, ChevronRight, Sparkles,
+  Map, Headphones, Star, Leaf, ChevronRight, Sparkles,
 } from "lucide-react";
+
 
 export const Route = createFileRoute("/features")({
   head: () => ({ meta: [{ title: "Features — TrailMate" }, { name: "description", content: "Advanced safety, navigation and AI features for hikers." }] }),

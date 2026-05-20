@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
-import { achievements } from "@/lib/mock-data";
-import { Settings, Award, Mountain, TrendingUp, Share2, ChevronRight, Backpack, Sparkles } from "lucide-react";
+import { achievements, seedBreadcrumbs, seedJournal, species as allSpecies, type BreadcrumbTrail, type JournalEntry } from "@/lib/mock-data";
+import { Settings, Award, Mountain, TrendingUp, Share2, ChevronRight, Backpack, Sparkles, Footprints, Leaf, Key } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { toast } from "sonner";
+
 
 export const Route = createFileRoute("/profile")({
   head: () => ({ meta: [{ title: "Profile — TrailMate" }, { name: "description", content: "Achievements, gear checklist and settings." }] }),
@@ -16,6 +17,9 @@ function Profile() {
   const next = Math.round((earned / achievements.length) * 100);
   const [profile, setProfile] = useState({ name: "Amine Khelifi", level: "Intermediate", region: "Tunis region" });
   const [openSheet, setOpenSheet] = useState<string | null>(null);
+  const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbTrail[]>(seedBreadcrumbs);
+  const [journal, setJournal] = useState<JournalEntry[]>(seedJournal);
+
 
   useEffect(() => {
     try {
@@ -27,9 +31,20 @@ function Profile() {
           level: p.level || "Intermediate",
           region: p.region || "Tunis region",
         });
+        if (Array.isArray(p.breadcrumbs)) setBreadcrumbs(p.breadcrumbs);
+        if (Array.isArray(p.journal)) setJournal(p.journal);
       }
     } catch {}
   }, []);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("trailmate.profile");
+      const base = raw ? JSON.parse(raw) : {};
+      localStorage.setItem("trailmate.profile", JSON.stringify({ ...base, breadcrumbs, journal }));
+    } catch {}
+  }, [breadcrumbs, journal]);
+
 
   const share = async () => {
     const data = { title: "TrailMate Achievements", text: `${earned}/${achievements.length} badges unlocked on TrailMate Tunisia 🏔️` };
@@ -99,17 +114,64 @@ function Profile() {
         </div>
       </div>
 
+      {/* Breadcrumb trails (GhostTrail recordings) */}
+      <div className="px-5 mt-6">
+        <div className="flex items-center gap-2 mb-3">
+          <Footprints className="h-4 w-4 text-primary" />
+          <h2 className="font-bold">Breadcrumb trails</h2>
+        </div>
+        <div className="space-y-2">
+          {breadcrumbs.map(b => (
+            <div key={b.id} className="bg-card rounded-2xl p-3 shadow-[var(--shadow-card)] flex items-center gap-3">
+              <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center"><Footprints className="h-4 w-4 text-primary" /></div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold truncate">{b.trailName}</p>
+                <p className="text-[11px] text-muted-foreground">{b.date} · {b.distanceKm} km</p>
+              </div>
+              <button onClick={()=>toast(`Rescue key: ${b.rescueKey}`)} className="text-[11px] font-bold text-primary flex items-center gap-1 bg-primary/10 px-2.5 py-1.5 rounded-full">
+                <Key className="h-3 w-3" />Key
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Species journal */}
+      <div className="px-5 mt-6">
+        <div className="flex items-center gap-2 mb-3">
+          <Leaf className="h-4 w-4 text-secondary" />
+          <h2 className="font-bold">Species journal</h2>
+        </div>
+        <div className="bg-card rounded-2xl p-3 shadow-[var(--shadow-card)] divide-y divide-border">
+          {journal.length === 0 ? (
+            <p className="text-[11px] text-muted-foreground py-2">No sightings yet.</p>
+          ) : journal.map(j => {
+            const sp = allSpecies.find(s => s.id === j.speciesId);
+            return (
+              <div key={j.id} className="flex items-center gap-3 py-2.5">
+                <span className="text-2xl">{sp?.emoji || "🐾"}</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold">{sp?.name || "Unknown"}</p>
+                  <p className="text-[11px] text-muted-foreground">{j.date} · {j.trailName}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       <GearChecklist />
 
       <div className="px-5 mt-6 space-y-2">
         <Link to="/features" className="w-full bg-primary text-primary-foreground rounded-2xl p-4 flex items-center gap-3 shadow-[var(--shadow-float)]">
           <Sparkles className="h-4 w-4" />
           <div className="flex-1 text-left">
-            <p className="text-sm font-bold">Explore 12 advanced features</p>
-            <p className="text-[11px] opacity-90">Safety Watch · Mesh SOS · AR · Wildlife ID & more</p>
+            <p className="text-sm font-bold">Advanced features</p>
+            <p className="text-[11px] opacity-90">AR · Walkie-Talkie · StarPath · WildlifeID</p>
           </div>
           <ChevronRight className="h-4 w-4" />
         </Link>
+
         {menu.map(({i: I, t}) => (
           <button key={t} onClick={()=>setOpenSheet(t)} className="w-full bg-card rounded-2xl p-4 flex items-center gap-3 shadow-[var(--shadow-card)]">
             <I className="h-4 w-4 text-primary" />

@@ -1,9 +1,9 @@
 import { createFileRoute, Link, Outlet, useMatches } from "@tanstack/react-router";
 import { MobileShell } from "@/components/MobileShell";
 import {
-  ShieldAlert, LifeBuoy, Radio, Map, Headphones, Backpack, Bot,
-  Share2, Footprints, Leaf, Star, ThermometerSun, ChevronRight, Sparkles,
+  Map, Headphones, Star, Leaf, ChevronRight, Sparkles,
 } from "lucide-react";
+
 
 export const Route = createFileRoute("/features")({
   head: () => ({ meta: [{ title: "Features — TrailMate" }, { name: "description", content: "Advanced safety, navigation and AI features for hikers." }] }),
@@ -11,19 +11,12 @@ export const Route = createFileRoute("/features")({
 });
 
 const features = [
-  { to: "/features/safety-watch", t: "AI Safety Watch", d: "Auto fall & inactivity detection", i: ShieldAlert, c: "danger" },
-  { to: "/features/offline-emergency", t: "Offline Emergency", d: "Step-by-step offline guide", i: LifeBuoy, c: "warning" },
-  { to: "/features/mesh-sos", t: "Mesh SOS Network", d: "Bluetooth SOS relay", i: Radio, c: "danger" },
   { to: "/features/route-ar", t: "AR Route Generator", d: "AI route + AR navigation", i: Map, c: "primary" },
   { to: "/features/radio", t: "RadioMode Walkie-Talkie", d: "Push-to-talk over BT/WiFi", i: Headphones, c: "primary" },
-  { to: "/features/gear", t: "Smart Gear Checklist", d: "AI packing list", i: Backpack, c: "secondary" },
-  { to: "/features/companion", t: "AI Hiking Companion", d: "Real-time pace & safety AI", i: Bot, c: "primary" },
-  { to: "/features/share-route", t: "Enhanced Route Sharing", d: "Upload geotagged trails", i: Share2, c: "secondary" },
-  { to: "/features/ghost-trail", t: "GhostTrail Footprints", d: "Encrypted breadcrumbs", i: Footprints, c: "primary" },
-  { to: "/features/wildlife", t: "WildlifeID Lens", d: "Offline species ID", i: Leaf, c: "secondary" },
   { to: "/features/starpath", t: "StarPath Night Navigator", d: "Constellation compass", i: Star, c: "primary" },
-  { to: "/features/thermal", t: "ThermalRisk Scanner", d: "Heatstroke risk score", i: ThermometerSun, c: "warning" },
+  { to: "/features/wildlife", t: "WildlifeID Lens", d: "Offline species ID", i: Leaf, c: "secondary" },
 ] as const;
+
 
 function FeaturesLayout() {
   const matches = useMatches();
@@ -37,7 +30,7 @@ function FeaturesLayout() {
           <Sparkles className="h-5 w-5 text-primary" />
           <h1 className="font-bold text-2xl">Features</h1>
         </div>
-        <p className="text-xs text-muted-foreground mt-1">12 advanced modules — safety, navigation, offline AI.</p>
+        <p className="text-xs text-muted-foreground mt-1">4 advanced modules — navigation & discovery.</p>
       </div>
       <div className="px-5 mt-5 grid grid-cols-2 gap-3">
         {features.map(({ to, t, d, i: I, c }) => {

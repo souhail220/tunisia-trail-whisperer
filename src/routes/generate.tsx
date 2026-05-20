@@ -3,7 +3,9 @@ import { useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
 import { trails } from "@/lib/mock-data";
 import { TrailCard } from "@/components/TrailCard";
-import { ChevronLeft, Sparkles } from "lucide-react";
+import { ChevronLeft, Sparkles, Map } from "lucide-react";
+import { AROverlaySheet, GearChecklistSheet } from "@/components/feature-sheets";
+
 
 export const Route = createFileRoute("/generate")({
   head: () => ({ meta: [{ title: "AI Route Generator — TrailMate" }, { name: "description", content: "Generate a perfect Tunisian hike with AI." }] }),
@@ -19,6 +21,11 @@ function Generate() {
   const [budget, setBudget] = useState("free");
   const [chosen, setChosen] = useState<string[]>(["Scenic views"]);
   const [phase, setPhase] = useState<"form"|"loading"|"results">("form");
+  const [arOpen, setArOpen] = useState<string | null>(null);
+  const [gearOpen, setGearOpen] = useState(false);
+  const results = trails.slice(0,3);
+  const primary = results[0];
+
 
   const generate = () => {
     setPhase("loading");
@@ -95,17 +102,34 @@ function Generate() {
         <div className="mt-6">
           <p className="px-5 text-xs text-muted-foreground mb-3">3 routes matched your preferences</p>
           <div className="flex gap-3 overflow-x-auto no-scrollbar px-5 pb-2 snap-x">
-            {trails.slice(0,3).map(t => (
-              <Link key={t.id} to="/trail/$id" params={{ id: t.id }} className="snap-center min-w-[280px]">
-                <TrailCard trail={t} compact />
-              </Link>
+            {results.map(t => (
+              <div key={t.id} className="snap-center min-w-[280px] relative">
+                <Link to="/trail/$id" params={{ id: t.id }}>
+                  <TrailCard trail={t} compact />
+                </Link>
+                <button onClick={()=>setArOpen(t.id)} className="mt-2 w-full bg-card border border-border rounded-xl py-2 text-xs font-semibold text-primary flex items-center justify-center gap-1.5">
+                  <Map className="h-3.5 w-3.5" />View in AR
+                </button>
+              </div>
             ))}
           </div>
-          <div className="px-5 mt-6">
+          <div className="px-5 mt-6 space-y-3">
+            <button onClick={()=>setGearOpen(true)} className="w-full bg-card rounded-2xl p-4 text-left shadow-[var(--shadow-card)] flex items-center gap-3">
+              <span className="text-2xl">🎒</span>
+              <div className="flex-1">
+                <p className="font-semibold text-sm">What to pack for this route</p>
+                <p className="text-[11px] text-muted-foreground">AI-tuned for {primary.difficulty} · {primary.weather}</p>
+              </div>
+              <span className="text-xs font-bold text-primary">Open →</span>
+            </button>
             <button onClick={()=>setPhase("form")} className="w-full bg-card border border-border font-semibold py-3 rounded-2xl text-sm">Refine preferences</button>
           </div>
         </div>
       )}
+
+      <AROverlaySheet open={arOpen !== null} onOpenChange={(o)=>!o&&setArOpen(null)} trailName={results.find(t=>t.id===arOpen)?.name} />
+      <GearChecklistSheet open={gearOpen} onOpenChange={setGearOpen} difficulty={primary.difficulty} weather={primary.weather} region={primary.region} />
     </MobileShell>
   );
 }
+

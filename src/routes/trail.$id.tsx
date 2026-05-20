@@ -1,9 +1,11 @@
 import { createFileRoute, notFound, useRouter } from "@tanstack/react-router";
 import { useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
-import { trails, difficultyColor } from "@/lib/mock-data";
-import { ChevronLeft, MapPin, Mountain, Clock, Bookmark, Play, Mic, TrendingUp, Share2 } from "lucide-react";
+import { trails, difficultyColor, thermalRiskFor } from "@/lib/mock-data";
+import { ChevronLeft, MapPin, Mountain, Clock, Bookmark, Play, Mic, TrendingUp, Share2, Map, Backpack, ThermometerSun } from "lucide-react";
 import { toast } from "sonner";
+import { ThermalRiskSheet, WildlifeRow, GearChecklistSheet, AROverlaySheet } from "@/components/feature-sheets";
+
 
 export const Route = createFileRoute("/trail/$id")({
   component: TrailDetail,
@@ -16,6 +18,12 @@ function TrailDetail() {
   if (!trail) throw notFound();
 
   const [saved, setSaved] = useState(false);
+  const [thermalOpen, setThermalOpen] = useState(false);
+  const [gearOpen, setGearOpen] = useState(false);
+  const [arOpen, setArOpen] = useState(false);
+  const risk = thermalRiskFor(trail.region);
+  const riskTone = risk.level === "high" ? "bg-danger/10 text-danger" : risk.level === "moderate" ? "bg-warning/20 text-warning-foreground" : "bg-success/15 text-success";
+
 
   const back = () => {
     if (typeof window !== "undefined" && window.history.length > 1) router.history.back();
@@ -39,6 +47,7 @@ function TrailDetail() {
         <img src={trail.image} alt={trail.name} className="w-full h-72 object-cover" />
         <button onClick={back} className="absolute top-6 left-5 h-10 w-10 rounded-2xl bg-background/90 flex items-center justify-center" aria-label="Back"><ChevronLeft className="h-5 w-5" /></button>
         <div className="absolute top-6 right-5 flex gap-2">
+          <button onClick={()=>setArOpen(true)} className="h-10 w-10 rounded-2xl bg-background/90 flex items-center justify-center" aria-label="AR Preview"><Map className="h-5 w-5 text-primary" /></button>
           <button onClick={share} className="h-10 w-10 rounded-2xl bg-background/90 flex items-center justify-center" aria-label="Share"><Share2 className="h-5 w-5 text-primary" /></button>
           <button onClick={()=>{setSaved(s=>!s); toast(saved ? "Removed from saved" : "Saved to your routes");}} className="h-10 w-10 rounded-2xl bg-background/90 flex items-center justify-center" aria-label="Save">
             <Bookmark className={`h-5 w-5 text-primary ${saved ? "fill-primary" : ""}`} />
@@ -47,6 +56,9 @@ function TrailDetail() {
       </div>
 
       <div className="px-5 -mt-8 relative">
+        <button onClick={()=>setThermalOpen(true)} className={`inline-flex items-center gap-1.5 ${riskTone} text-[11px] font-bold px-3 py-1 rounded-full mb-3`}>
+          <ThermometerSun className="h-3 w-3" />{risk.label} today
+        </button>
         <div className="bg-card rounded-3xl p-5 shadow-[var(--shadow-card)]">
           <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold ${difficultyColor(trail.difficulty)}`}>{trail.difficulty}</span>
           <h1 className="text-xl font-bold mt-2">{trail.name}</h1>
@@ -57,6 +69,19 @@ function TrailDetail() {
             <Stat icon={Clock} v={`${trail.durationH}h`} l="time" />
           </div>
           <p className="text-sm text-muted-foreground mt-4 leading-relaxed">{trail.description}</p>
+        </div>
+
+        <button onClick={()=>setGearOpen(true)} className="w-full text-left bg-card rounded-2xl p-4 mt-4 shadow-[var(--shadow-card)] flex items-start gap-3">
+          <div className="h-9 w-9 rounded-xl bg-secondary/15 flex items-center justify-center"><Backpack className="h-4 w-4 text-secondary" /></div>
+          <div className="flex-1">
+            <p className="font-semibold text-sm">What to pack</p>
+            <p className="text-[11px] text-muted-foreground">AI checklist for {trail.difficulty} · {trail.weather}</p>
+          </div>
+          <span className="text-xs font-semibold text-primary">Open →</span>
+        </button>
+
+        <div className="mt-4">
+          <WildlifeRow trailId={trail.id} />
         </div>
 
         <button onClick={()=>toast("AI Companion ready — open AI Guide tab")} className="w-full text-left bg-primary/5 border border-primary/20 rounded-2xl p-4 mt-4 flex items-start gap-3">
@@ -71,9 +96,14 @@ function TrailDetail() {
           <Play className="h-4 w-4 fill-current" /> Start hike
         </button>
       </div>
+
+      <ThermalRiskSheet open={thermalOpen} onOpenChange={setThermalOpen} region={trail.region} />
+      <GearChecklistSheet open={gearOpen} onOpenChange={setGearOpen} difficulty={trail.difficulty} weather={trail.weather} region={trail.region} />
+      <AROverlaySheet open={arOpen} onOpenChange={setArOpen} trailName={trail.name} />
     </MobileShell>
   );
 }
+
 
 function Stat({ icon: I, v, l }: any) {
   return (

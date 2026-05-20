@@ -2,13 +2,15 @@ import { createFileRoute, notFound, useRouter, Link } from "@tanstack/react-rout
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
 import { trails } from "@/lib/mock-data";
-import { ChevronLeft, MapPin, Flag, Trophy, Bot, Send, Pause, Play, CheckCircle2, Sparkles, Navigation } from "lucide-react";
+import { ChevronLeft, MapPin, Flag, Trophy, Bot, Send, Pause, Play, CheckCircle2, Sparkles, Navigation, ChevronDown, Star, LifeBuoy, Footprints } from "lucide-react";
 import { toast } from "sonner";
 import mapBg from "@/assets/map-bg.jpg";
+import { SafetyWatchPanel, MeshSOSSheet, OfflineEmergencySheet, StarPathSheet, ThermalStrip, ThermalRiskSheet } from "@/components/feature-sheets";
 
 export const Route = createFileRoute("/hike/$id")({
   component: ActiveHike,
 });
+
 
 type Checkpoint = { id: string; name: string; km: number; reward: string; xp: number; pos: { top: string; left: string } };
 
@@ -41,16 +43,34 @@ function ActiveHike() {
   const chatRef = useRef<HTMLDivElement>(null);
   const companionRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [companionActive, setCompanionActive] = useState(false);
+  const [companionOpen, setCompanionOpen] = useState(false);
+  const [meshOpen, setMeshOpen] = useState(false);
+  const [emergencyOpen, setEmergencyOpen] = useState(false);
+  const [starOpen, setStarOpen] = useState(false);
+  const [thermalOpen, setThermalOpen] = useState(false);
+  const rescueKey = useMemo(() => `${trail.id.slice(0,3).toUpperCase()}-${Math.floor(1000+Math.random()*9000)}-${Math.random().toString(36).slice(2,5).toUpperCase()}`, [trail.id]);
 
-  const activateCompanion = () => {
-    setCompanionActive(true);
-    companionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-    setTimeout(() => inputRef.current?.focus(), 400);
-    if (messages.length <= 1) {
-      setMessages(m => [...m, { role: "ai", text: "I'm right here with you. Ask me anything — pace, hydration, navigation, weather." }]);
+  // Auto-start GhostTrail + reveal rescue key once
+  const started = useRef(false);
+  useEffect(() => {
+    if (started.current) return;
+    started.current = true;
+    toast.success("GhostTrail recording", { description: `Rescue key: ${rescueKey}`, duration: 8000 });
+  }, [rescueKey]);
+
+  const toggleCompanion = () => {
+    setCompanionOpen(o => !o);
+    if (!companionOpen) {
+      setTimeout(() => {
+        companionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+        inputRef.current?.focus();
+      }, 200);
+      if (messages.length <= 1) {
+        setMessages(m => [...m, { role: "ai", text: "I'm right here with you. Ask me anything — pace, hydration, navigation, weather." }]);
+      }
     }
   };
+
 
   // simulated movement
   useEffect(() => {
@@ -108,18 +128,30 @@ function ActiveHike() {
   return (
     <MobileShell>
       <div className="relative">
+        <ThermalStrip region={trail.region} onClick={()=>setThermalOpen(true)} />
         {/* Map */}
         <div className="relative h-[340px] overflow-hidden">
           <img src={mapBg} alt="Hike map" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background" />
 
-          <button onClick={() => router.history.back()} className="absolute top-6 left-5 h-10 w-10 rounded-2xl bg-background/95 flex items-center justify-center z-10" aria-label="Back">
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <div className="absolute top-6 right-5 bg-background/95 rounded-2xl px-3 py-2 z-10 flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-primary" />
-            <span className="text-xs font-bold">{xp} XP</span>
+          <div className="absolute top-6 left-5 flex items-center gap-2 z-10">
+            <button onClick={() => router.history.back()} className="h-10 w-10 rounded-2xl bg-background/95 flex items-center justify-center" aria-label="Back">
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button onClick={()=>setEmergencyOpen(true)} className="h-10 w-10 rounded-2xl bg-background/95 border-2 border-danger/60 text-danger flex items-center justify-center" aria-label="Emergency">
+              <LifeBuoy className="h-5 w-5" />
+            </button>
           </div>
+          <div className="absolute top-6 right-5 z-10 flex items-center gap-2">
+            <span className="bg-danger/90 text-danger-foreground text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1">
+              <Footprints className="h-3 w-3" />● Recording trail
+            </span>
+            <div className="bg-background/95 rounded-2xl px-3 py-2 flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <span className="text-xs font-bold">{xp} XP</span>
+            </div>
+          </div>
+
 
           {/* Path line */}
           <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
@@ -175,14 +207,21 @@ function ActiveHike() {
               </div>
               <p className="text-[10px] text-muted-foreground mt-1">{progress.toFixed(0)}% complete</p>
             </div>
-            <button
-              onClick={activateCompanion}
-              className={`mt-3 w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-sm font-semibold transition-colors ${companionActive ? "bg-secondary/15 text-secondary border border-secondary/30" : "bg-primary text-primary-foreground"}`}
-            >
-              <Bot className="h-4 w-4" />
-              {companionActive ? "Companion active — tap to chat" : "Activate AI companion"}
-            </button>
+            <div className="grid grid-cols-2 gap-2 mt-3">
+              <button onClick={toggleCompanion} className="flex items-center justify-center gap-2 py-2.5 rounded-2xl text-xs font-semibold bg-primary text-primary-foreground">
+                <Bot className="h-4 w-4" />{companionOpen ? "Hide companion" : "AI companion"}
+              </button>
+              <button onClick={()=>setStarOpen(true)} className="flex items-center justify-center gap-2 py-2.5 rounded-2xl text-xs font-semibold bg-card border border-border opacity-60">
+                <Star className="h-4 w-4" />StarPath
+              </button>
+            </div>
           </div>
+
+          {/* AI Safety Watch panel */}
+          <div className="mt-4">
+            <SafetyWatchPanel onSOS={()=>setMeshOpen(true)} />
+          </div>
+
 
           {/* Checkpoint rewards list */}
           <div className="mt-4">
@@ -206,34 +245,40 @@ function ActiveHike() {
             </div>
           </div>
 
-          {/* AI Companion */}
-          <div ref={companionRef} className={`mt-5 bg-card rounded-3xl p-4 shadow-[var(--shadow-card)] transition-all ${companionActive ? "ring-2 ring-primary/40" : ""}`}>
-            <div className="flex items-center gap-2 mb-3">
+          {/* AI Companion (collapsible) */}
+          <div ref={companionRef} className={`mt-5 bg-card rounded-3xl p-4 shadow-[var(--shadow-card)] transition-all ${companionOpen ? "ring-2 ring-primary/40" : ""}`}>
+            <button onClick={toggleCompanion} className="w-full flex items-center gap-2 text-left">
               <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Bot className="h-4 w-4 text-primary" />
               </div>
-              <div>
+              <div className="flex-1">
                 <p className="font-bold text-sm">AI Companion</p>
-                <p className="text-[10px] text-success font-semibold">● Live during hike</p>
+                <p className="text-[11px] text-muted-foreground">Pace: steady · Safety: all clear</p>
               </div>
-            </div>
-            <div ref={chatRef} className="max-h-48 overflow-y-auto space-y-2 pr-1">
-              {messages.map((m,i) => (
-                <div key={i} className={`max-w-[85%] rounded-2xl px-3 py-2 text-xs ${m.role==="ai" ? "bg-background text-foreground" : "bg-primary text-primary-foreground ml-auto"}`}>
-                  {m.text}
+              <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${companionOpen ? "rotate-180" : ""}`} />
+            </button>
+            {companionOpen && (
+              <div className="mt-3">
+                <div ref={chatRef} className="max-h-48 overflow-y-auto space-y-2 pr-1">
+                  {messages.map((m,i) => (
+                    <div key={i} className={`max-w-[85%] rounded-2xl px-3 py-2 text-xs ${m.role==="ai" ? "bg-background text-foreground" : "bg-primary text-primary-foreground ml-auto"}`}>
+                      {m.text}
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            <div className="flex gap-2 mt-3 overflow-x-auto no-scrollbar">
-              {["How far to next?", "I need a break", "Weather check"].map(q => (
-                <button key={q} onClick={()=>send(q)} className="whitespace-nowrap text-[11px] font-semibold bg-background border border-border rounded-full px-3 py-1.5">{q}</button>
-              ))}
-            </div>
-            <div className="mt-3 flex items-center gap-2 bg-background rounded-2xl px-3 py-2">
-              <input ref={inputRef} value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send(input)} placeholder="Ask your companion…" className="flex-1 bg-transparent outline-none text-sm" />
-              <button onClick={()=>send(input)} className="h-8 w-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center" aria-label="Send"><Send className="h-4 w-4" /></button>
-            </div>
+                <div className="flex gap-2 mt-3 overflow-x-auto no-scrollbar">
+                  {["How far to next?", "I need a break", "Weather check"].map(q => (
+                    <button key={q} onClick={()=>send(q)} className="whitespace-nowrap text-[11px] font-semibold bg-background border border-border rounded-full px-3 py-1.5">{q}</button>
+                  ))}
+                </div>
+                <div className="mt-3 flex items-center gap-2 bg-background rounded-2xl px-3 py-2">
+                  <input ref={inputRef} value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send(input)} placeholder="Ask your companion…" className="flex-1 bg-transparent outline-none text-sm" />
+                  <button onClick={()=>send(input)} className="h-8 w-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center" aria-label="Send"><Send className="h-4 w-4" /></button>
+                </div>
+              </div>
+            )}
           </div>
+
 
           <button
             onClick={finish}
@@ -245,9 +290,15 @@ function ActiveHike() {
           <Link to="/ai-guide" className="mt-3 mb-4 block text-center text-xs font-semibold text-primary">Open full AI Guide →</Link>
         </div>
       </div>
+
+      <MeshSOSSheet open={meshOpen} onOpenChange={setMeshOpen} />
+      <OfflineEmergencySheet open={emergencyOpen} onOpenChange={setEmergencyOpen} />
+      <StarPathSheet open={starOpen} onOpenChange={setStarOpen} />
+      <ThermalRiskSheet open={thermalOpen} onOpenChange={setThermalOpen} region={trail.region} />
     </MobileShell>
   );
 }
+
 
 function Mini({ v, l }: { v: string; l: string }) {
   return (

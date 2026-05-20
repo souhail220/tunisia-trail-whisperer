@@ -3,9 +3,11 @@ import { useMemo, useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
 import { TrailCard } from "@/components/TrailCard";
 import { trails } from "@/lib/mock-data";
-import { Search, SlidersHorizontal, Sparkles, Mountain, Clock, Star } from "lucide-react";
+import { Search, SlidersHorizontal, Sparkles, Mountain, Clock, Star, Backpack } from "lucide-react";
 import { toast } from "sonner";
 import mapBg from "@/assets/map-bg.jpg";
+import { ThermalPill, WildlifeChips, GearChecklistSheet } from "@/components/feature-sheets";
+
 
 export const Route = createFileRoute("/explore")({
   head: () => ({ meta: [{ title: "Explore — TrailMate Tunisia" }, { name: "description", content: "Discover Tunisian trails on an interactive map." }] }),
@@ -17,6 +19,8 @@ const filters = ["All", "Easy", "Moderate", "Hard", "Expert", "< 5km", "Coast", 
 function ExplorePage() {
   const [active, setActive] = useState("All");
   const [query, setQuery] = useState("");
+  const [gearOpen, setGearOpen] = useState(false);
+
 
   const visible = useMemo(() => {
     return trails.filter(t => {
@@ -74,7 +78,19 @@ function ExplorePage() {
               </Link>
             </div>
           </div>
+          {/* Wildlife + gear extras */}
+          <div className="mt-3 bg-card rounded-2xl p-3 shadow-[var(--shadow-card)] space-y-3">
+            <div>
+              <p className="text-[10px] font-bold uppercase text-muted-foreground mb-1.5">Wildlife on this trail</p>
+              <WildlifeChips trailId={featured.id} />
+            </div>
+            <button onClick={()=>setGearOpen(true)} className="w-full flex items-center justify-between text-xs font-semibold text-primary">
+              <span className="flex items-center gap-2"><Backpack className="h-3.5 w-3.5" />Prepare for this trail</span>
+              <span>→</span>
+            </button>
+          </div>
         </div>
+
 
         <div className="relative h-[420px]">
           <img src={mapBg} alt="Trail map" className="absolute inset-0 w-full h-full object-cover" />
@@ -114,11 +130,17 @@ function ExplorePage() {
           ) : (
             <div className="flex gap-3 overflow-x-auto no-scrollbar px-5 pb-2">
               {visible.map(t => (
-                <Link key={t.id} to="/trail/$id" params={{ id: t.id }} className="block">
-                  <TrailCard trail={t} compact />
-                </Link>
+                <div key={t.id} className="relative">
+                  <Link to="/trail/$id" params={{ id: t.id }} className="block">
+                    <TrailCard trail={t} compact />
+                  </Link>
+                  <div className="absolute top-2 right-10">
+                    <ThermalPill region={t.region} />
+                  </div>
+                </div>
               ))}
             </div>
+
           )}
         </div>
 
@@ -130,6 +152,8 @@ function ExplorePage() {
         </div>
 
       </div>
+      <GearChecklistSheet open={gearOpen} onOpenChange={setGearOpen} difficulty={featured.difficulty} weather={featured.weather} region={featured.region} />
     </MobileShell>
   );
 }
+

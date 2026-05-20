@@ -3,9 +3,11 @@ import { useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
 import { PageHeader } from "@/components/PageHeader";
 import { posts as seedPosts, hazards, difficultyColor, type Post } from "@/lib/mock-data";
-import { Heart, MessageCircle, Bookmark, AlertTriangle, Plus, MapPin } from "lucide-react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter, SheetClose } from "@/components/ui/sheet";
+import { Heart, MessageCircle, Bookmark, AlertTriangle, Plus, MapPin, Headphones } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { toast } from "sonner";
+import { RadioModeSheet, EnhancedShareForm } from "@/components/feature-sheets";
+
 
 export const Route = createFileRoute("/community")({
   head: () => ({ meta: [{ title: "Community — TrailMate" }, { name: "description", content: "Shared GPS trails, photos and hazard warnings from Tunisian hikers." }] }),
@@ -17,6 +19,8 @@ function Community() {
   const [liked, setLiked] = useState<Record<string, boolean>>({});
   const [saved, setSaved] = useState<Record<string, boolean>>({});
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [radioOpen, setRadioOpen] = useState(false);
+
 
   const toggleLike = (id: string) => {
     setLiked(l => ({ ...l, [id]: !l[id] }));
@@ -30,6 +34,14 @@ function Community() {
   return (
     <MobileShell>
       <PageHeader title="Community" subtitle="Trails, photos & hazards" />
+
+      <div className="px-5 mb-3">
+        <button onClick={()=>setRadioOpen(true)} className="w-full bg-primary/10 text-primary rounded-2xl px-4 py-2.5 flex items-center justify-between">
+          <span className="flex items-center gap-2 text-xs font-bold"><Headphones className="h-4 w-4" />📡 Open channel · Trailheads</span>
+          <span className="text-[10px] font-semibold opacity-80">12 hikers connected</span>
+        </button>
+      </div>
+
 
       <div className="px-5 space-y-2 mb-4">
         {hazards.map(h => {
@@ -87,33 +99,34 @@ function Community() {
       </div>
 
       <ShareTrailFab onShare={post => setPosts(ps => [post, ...ps])} />
+      <RadioModeSheet open={radioOpen} onOpenChange={setRadioOpen} />
     </MobileShell>
   );
 }
 
 function ShareTrailFab({ onShare }: { onShare: (p: Post) => void }) {
   const [open, setOpen] = useState(false);
-  const [trail, setTrail] = useState("");
-  const [region, setRegion] = useState("");
 
-  const submit = () => {
-    if (!trail.trim() || !region.trim()) {
-      toast.error("Add a trail name and region");
-      return;
-    }
+  const submit = (data: { kind: "trail" | "hazard" | "wildlife"; trail: string; region: string; hazard?: string; speciesName?: string; speciesDesc?: string; gpxName?: string }) => {
     const post: Post = {
       id: `u${Date.now()}`,
       user: "You",
       avatar: "https://i.pravatar.cc/80?img=14",
-      trail, trailId: "zaghouan", region,
+      trail: data.kind === "wildlife" ? `🐾 ${data.speciesName} · ${data.trail}` : data.trail,
+      trailId: "zaghouan",
+      region: data.region,
       date: "just now",
       image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800",
       difficulty: "Moderate",
       likes: 0, comments: 0,
+      hazard: data.kind === "hazard" ? data.hazard : undefined,
     };
     onShare(post);
-    toast.success("Trail shared with the community");
-    setTrail(""); setRegion(""); setOpen(false);
+    toast.success(
+      data.kind === "wildlife" ? "Wildlife sighting shared" :
+      data.kind === "hazard" ? "Hazard reported" : "Trail shared with the community"
+    );
+    setOpen(false);
   };
 
   return (
@@ -123,27 +136,13 @@ function ShareTrailFab({ onShare }: { onShare: (p: Post) => void }) {
           <Plus className="h-6 w-6" />
         </button>
       </SheetTrigger>
-      <SheetContent side="bottom" className="rounded-t-3xl">
+      <SheetContent side="bottom" className="rounded-t-3xl max-h-[90vh] overflow-y-auto">
         <SheetHeader>
-          <SheetTitle>Share a trail</SheetTitle>
+          <SheetTitle>Share with the community</SheetTitle>
         </SheetHeader>
-        <div className="space-y-3 mt-4">
-          <div>
-            <label className="text-xs font-medium text-muted-foreground">Trail name</label>
-            <input value={trail} onChange={e=>setTrail(e.target.value)} className="w-full mt-1 px-4 py-3 rounded-xl bg-card border border-border outline-none text-sm" placeholder="e.g. Cap Bon Cliff Walk" />
-          </div>
-          <div>
-            <label className="text-xs font-medium text-muted-foreground">Region</label>
-            <input value={region} onChange={e=>setRegion(e.target.value)} className="w-full mt-1 px-4 py-3 rounded-xl bg-card border border-border outline-none text-sm" placeholder="e.g. Nabeul" />
-          </div>
-        </div>
-        <SheetFooter className="mt-4">
-          <button onClick={submit} className="w-full bg-primary text-primary-foreground font-semibold py-3 rounded-xl">Post</button>
-          <SheetClose asChild>
-            <button className="w-full bg-card border border-border font-semibold py-3 rounded-xl text-sm">Cancel</button>
-          </SheetClose>
-        </SheetFooter>
+        <EnhancedShareForm onSubmit={submit} onCancel={()=>setOpen(false)} />
       </SheetContent>
     </Sheet>
   );
 }
+

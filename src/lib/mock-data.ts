@@ -74,3 +74,59 @@ export const achievements = [
   { id: "a7", name: "Story Trail", icon: "🎧", earned: false },
   { id: "a8", name: "Community Hero", icon: "💚", earned: false },
 ];
+
+export type Species = {
+  id: string; name: string; sci: string; kind: "Bird" | "Reptile" | "Plant" | "Insect" | "Mammal";
+  danger: "None" | "Low" | "Moderate" | "High"; habitat: string; note: string; emoji: string;
+};
+
+export const species: Species[] = [
+  { id: "sp1", name: "Barbary partridge", sci: "Alectoris barbara", kind: "Bird", danger: "Low", habitat: "Scrubland, hills", note: "Endemic to North Africa, ground-nesting.", emoji: "🐦" },
+  { id: "sp2", name: "Horseshoe whip snake", sci: "Hemorrhois hippocrepis", kind: "Reptile", danger: "Low", habitat: "Rocky areas", note: "Non-venomous, fast-moving. Backs away if approached.", emoji: "🐍" },
+  { id: "sp3", name: "Atlas mastic tree", sci: "Pistacia atlantica", kind: "Plant", danger: "None", habitat: "Arid mountains", note: "Drought-tolerant, edible resin.", emoji: "🌳" },
+  { id: "sp4", name: "Yellow scorpion", sci: "Buthus occitanus", kind: "Insect", danger: "Moderate", habitat: "Dry stones", note: "Sting painful, rarely dangerous to adults.", emoji: "🦂" },
+  { id: "sp5", name: "Flamingo", sci: "Phoenicopterus roseus", kind: "Bird", danger: "None", habitat: "Wetlands", note: "Migratory flocks gather at Ichkeul.", emoji: "🦩" },
+  { id: "sp6", name: "Fennec fox", sci: "Vulpes zerda", kind: "Mammal", danger: "Low", habitat: "Desert dunes", note: "Nocturnal, oversized ears for thermoregulation.", emoji: "🦊" },
+  { id: "sp7", name: "Cork oak", sci: "Quercus suber", kind: "Plant", danger: "None", habitat: "Mediterranean forest", note: "Harvested sustainably for cork.", emoji: "🌲" },
+];
+
+export const speciesByTrail: Record<string, string[]> = {
+  zaghouan: ["sp1", "sp2", "sp4"],
+  aindraham: ["sp7", "sp1", "sp6"],
+  ichkeul: ["sp5", "sp1"],
+  chaambi: ["sp3", "sp2", "sp4"],
+  tamerza: ["sp6", "sp3", "sp4"],
+  sidibou: ["sp1", "sp7"],
+};
+
+export const speciesFor = (trailId: string): Species[] =>
+  (speciesByTrail[trailId] || []).map(id => species.find(s => s.id === id)!).filter(Boolean);
+
+export type ThermalRisk = { level: "low" | "moderate" | "high"; score: number; uv: number; tempC: number; label: string };
+
+const riskMap: Record<string, ThermalRisk> = {
+  Zaghouan:  { level: "moderate", score: 58, uv: 7, tempC: 31, label: "Moderate heat" },
+  Jendouba:  { level: "low",      score: 28, uv: 4, tempC: 22, label: "Low heat" },
+  Bizerte:   { level: "low",      score: 32, uv: 5, tempC: 24, label: "Low heat" },
+  Kasserine: { level: "high",     score: 84, uv: 10, tempC: 38, label: "High heat today" },
+  Tozeur:    { level: "high",     score: 91, uv: 11, tempC: 42, label: "High heat today" },
+  Tunis:     { level: "moderate", score: 52, uv: 6, tempC: 28, label: "Moderate heat" },
+};
+
+export const thermalRiskFor = (region: string): ThermalRisk =>
+  riskMap[region] || { level: "moderate", score: 50, uv: 6, tempC: 28, label: "Moderate heat" };
+
+export type BreadcrumbTrail = { id: string; trailId: string; trailName: string; date: string; distanceKm: number; rescueKey: string };
+export type JournalEntry = { id: string; speciesId: string; date: string; trailName: string };
+
+export const seedBreadcrumbs: BreadcrumbTrail[] = [
+  { id: "bc1", trailId: "zaghouan", trailName: "Jebel Zaghouan Summit", date: "May 12", distanceKm: 12.4, rescueKey: "ZGN-4821-RX9" },
+  { id: "bc2", trailId: "tamerza", trailName: "Tamerza Canyon & Oasis", date: "Apr 28", distanceKm: 9.5, rescueKey: "TMZ-1129-K2L" },
+  { id: "bc3", trailId: "aindraham", trailName: "Ain Draham Cork Forest", date: "Apr 14", distanceKm: 8.2, rescueKey: "ADR-7720-Q8P" },
+];
+
+export const seedJournal: JournalEntry[] = [
+  { id: "j1", speciesId: "sp5", date: "May 02", trailName: "Ichkeul Wetlands" },
+  { id: "j2", speciesId: "sp1", date: "Apr 18", trailName: "Jebel Zaghouan Summit" },
+  { id: "j3", speciesId: "sp6", date: "Mar 30", trailName: "Tamerza Canyon" },
+];

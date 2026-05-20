@@ -1,9 +1,11 @@
 import { createFileRoute, notFound, useRouter } from "@tanstack/react-router";
 import { useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
-import { trails, difficultyColor } from "@/lib/mock-data";
-import { ChevronLeft, MapPin, Mountain, Clock, Bookmark, Play, Mic, TrendingUp, Share2 } from "lucide-react";
+import { trails, difficultyColor, thermalRiskFor } from "@/lib/mock-data";
+import { ChevronLeft, MapPin, Mountain, Clock, Bookmark, Play, Mic, TrendingUp, Share2, Map, Backpack, ThermometerSun } from "lucide-react";
 import { toast } from "sonner";
+import { ThermalRiskSheet, WildlifeRow, GearChecklistSheet, AROverlaySheet } from "@/components/feature-sheets";
+
 
 export const Route = createFileRoute("/trail/$id")({
   component: TrailDetail,

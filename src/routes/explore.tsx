@@ -78,7 +78,19 @@ function ExplorePage() {
               </Link>
             </div>
           </div>
+          {/* Wildlife + gear extras */}
+          <div className="mt-3 bg-card rounded-2xl p-3 shadow-[var(--shadow-card)] space-y-3">
+            <div>
+              <p className="text-[10px] font-bold uppercase text-muted-foreground mb-1.5">Wildlife on this trail</p>
+              <WildlifeChips trailId={featured.id} />
+            </div>
+            <button onClick={()=>setGearOpen(true)} className="w-full flex items-center justify-between text-xs font-semibold text-primary">
+              <span className="flex items-center gap-2"><Backpack className="h-3.5 w-3.5" />Prepare for this trail</span>
+              <span>→</span>
+            </button>
+          </div>
         </div>
+
 
         <div className="relative h-[420px]">
           <img src={mapBg} alt="Trail map" className="absolute inset-0 w-full h-full object-cover" />

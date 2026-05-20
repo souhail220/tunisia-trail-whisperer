@@ -152,6 +152,8 @@ function ExplorePage() {
         </div>
 
       </div>
+      <GearChecklistSheet open={gearOpen} onOpenChange={setGearOpen} difficulty={featured.difficulty} weather={featured.weather} region={featured.region} />
     </MobileShell>
   );
 }
+

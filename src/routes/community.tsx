@@ -3,9 +3,11 @@ import { useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
 import { PageHeader } from "@/components/PageHeader";
 import { posts as seedPosts, hazards, difficultyColor, type Post } from "@/lib/mock-data";
-import { Heart, MessageCircle, Bookmark, AlertTriangle, Plus, MapPin } from "lucide-react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter, SheetClose } from "@/components/ui/sheet";
+import { Heart, MessageCircle, Bookmark, AlertTriangle, Plus, MapPin, Headphones } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { toast } from "sonner";
+import { RadioModeSheet, EnhancedShareForm } from "@/components/feature-sheets";
+
 
 export const Route = createFileRoute("/community")({
   head: () => ({ meta: [{ title: "Community — TrailMate" }, { name: "description", content: "Shared GPS trails, photos and hazard warnings from Tunisian hikers." }] }),

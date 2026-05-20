@@ -21,6 +21,11 @@ function Generate() {
   const [budget, setBudget] = useState("free");
   const [chosen, setChosen] = useState<string[]>(["Scenic views"]);
   const [phase, setPhase] = useState<"form"|"loading"|"results">("form");
+  const [arOpen, setArOpen] = useState<string | null>(null);
+  const [gearOpen, setGearOpen] = useState(false);
+  const results = trails.slice(0,3);
+  const primary = results[0];
+
 
   const generate = () => {
     setPhase("loading");

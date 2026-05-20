@@ -245,34 +245,40 @@ function ActiveHike() {
             </div>
           </div>
 
-          {/* AI Companion */}
-          <div ref={companionRef} className={`mt-5 bg-card rounded-3xl p-4 shadow-[var(--shadow-card)] transition-all ${companionActive ? "ring-2 ring-primary/40" : ""}`}>
-            <div className="flex items-center gap-2 mb-3">
+          {/* AI Companion (collapsible) */}
+          <div ref={companionRef} className={`mt-5 bg-card rounded-3xl p-4 shadow-[var(--shadow-card)] transition-all ${companionOpen ? "ring-2 ring-primary/40" : ""}`}>
+            <button onClick={toggleCompanion} className="w-full flex items-center gap-2 text-left">
               <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Bot className="h-4 w-4 text-primary" />
               </div>
-              <div>
+              <div className="flex-1">
                 <p className="font-bold text-sm">AI Companion</p>
-                <p className="text-[10px] text-success font-semibold">● Live during hike</p>
+                <p className="text-[11px] text-muted-foreground">Pace: steady · Safety: all clear</p>
               </div>
-            </div>
-            <div ref={chatRef} className="max-h-48 overflow-y-auto space-y-2 pr-1">
-              {messages.map((m,i) => (
-                <div key={i} className={`max-w-[85%] rounded-2xl px-3 py-2 text-xs ${m.role==="ai" ? "bg-background text-foreground" : "bg-primary text-primary-foreground ml-auto"}`}>
-                  {m.text}
+              <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${companionOpen ? "rotate-180" : ""}`} />
+            </button>
+            {companionOpen && (
+              <div className="mt-3">
+                <div ref={chatRef} className="max-h-48 overflow-y-auto space-y-2 pr-1">
+                  {messages.map((m,i) => (
+                    <div key={i} className={`max-w-[85%] rounded-2xl px-3 py-2 text-xs ${m.role==="ai" ? "bg-background text-foreground" : "bg-primary text-primary-foreground ml-auto"}`}>
+                      {m.text}
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            <div className="flex gap-2 mt-3 overflow-x-auto no-scrollbar">
-              {["How far to next?", "I need a break", "Weather check"].map(q => (
-                <button key={q} onClick={()=>send(q)} className="whitespace-nowrap text-[11px] font-semibold bg-background border border-border rounded-full px-3 py-1.5">{q}</button>
-              ))}
-            </div>
-            <div className="mt-3 flex items-center gap-2 bg-background rounded-2xl px-3 py-2">
-              <input ref={inputRef} value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send(input)} placeholder="Ask your companion…" className="flex-1 bg-transparent outline-none text-sm" />
-              <button onClick={()=>send(input)} className="h-8 w-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center" aria-label="Send"><Send className="h-4 w-4" /></button>
-            </div>
+                <div className="flex gap-2 mt-3 overflow-x-auto no-scrollbar">
+                  {["How far to next?", "I need a break", "Weather check"].map(q => (
+                    <button key={q} onClick={()=>send(q)} className="whitespace-nowrap text-[11px] font-semibold bg-background border border-border rounded-full px-3 py-1.5">{q}</button>
+                  ))}
+                </div>
+                <div className="mt-3 flex items-center gap-2 bg-background rounded-2xl px-3 py-2">
+                  <input ref={inputRef} value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send(input)} placeholder="Ask your companion…" className="flex-1 bg-transparent outline-none text-sm" />
+                  <button onClick={()=>send(input)} className="h-8 w-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center" aria-label="Send"><Send className="h-4 w-4" /></button>
+                </div>
+              </div>
+            )}
           </div>
+
 
           <button
             onClick={finish}

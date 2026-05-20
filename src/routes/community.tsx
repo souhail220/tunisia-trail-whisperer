@@ -99,33 +99,34 @@ function Community() {
       </div>
 
       <ShareTrailFab onShare={post => setPosts(ps => [post, ...ps])} />
+      <RadioModeSheet open={radioOpen} onOpenChange={setRadioOpen} />
     </MobileShell>
   );
 }
 
 function ShareTrailFab({ onShare }: { onShare: (p: Post) => void }) {
   const [open, setOpen] = useState(false);
-  const [trail, setTrail] = useState("");
-  const [region, setRegion] = useState("");
 
-  const submit = () => {
-    if (!trail.trim() || !region.trim()) {
-      toast.error("Add a trail name and region");
-      return;
-    }
+  const submit = (data: { kind: "trail" | "hazard" | "wildlife"; trail: string; region: string; hazard?: string; speciesName?: string; speciesDesc?: string; gpxName?: string }) => {
     const post: Post = {
       id: `u${Date.now()}`,
       user: "You",
       avatar: "https://i.pravatar.cc/80?img=14",
-      trail, trailId: "zaghouan", region,
+      trail: data.kind === "wildlife" ? `🐾 ${data.speciesName} · ${data.trail}` : data.trail,
+      trailId: "zaghouan",
+      region: data.region,
       date: "just now",
       image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800",
       difficulty: "Moderate",
       likes: 0, comments: 0,
+      hazard: data.kind === "hazard" ? data.hazard : undefined,
     };
     onShare(post);
-    toast.success("Trail shared with the community");
-    setTrail(""); setRegion(""); setOpen(false);
+    toast.success(
+      data.kind === "wildlife" ? "Wildlife sighting shared" :
+      data.kind === "hazard" ? "Hazard reported" : "Trail shared with the community"
+    );
+    setOpen(false);
   };
 
   return (
@@ -135,27 +136,13 @@ function ShareTrailFab({ onShare }: { onShare: (p: Post) => void }) {
           <Plus className="h-6 w-6" />
         </button>
       </SheetTrigger>
-      <SheetContent side="bottom" className="rounded-t-3xl">
+      <SheetContent side="bottom" className="rounded-t-3xl max-h-[90vh] overflow-y-auto">
         <SheetHeader>
-          <SheetTitle>Share a trail</SheetTitle>
+          <SheetTitle>Share with the community</SheetTitle>
         </SheetHeader>
-        <div className="space-y-3 mt-4">
-          <div>
-            <label className="text-xs font-medium text-muted-foreground">Trail name</label>
-            <input value={trail} onChange={e=>setTrail(e.target.value)} className="w-full mt-1 px-4 py-3 rounded-xl bg-card border border-border outline-none text-sm" placeholder="e.g. Cap Bon Cliff Walk" />
-          </div>
-          <div>
-            <label className="text-xs font-medium text-muted-foreground">Region</label>
-            <input value={region} onChange={e=>setRegion(e.target.value)} className="w-full mt-1 px-4 py-3 rounded-xl bg-card border border-border outline-none text-sm" placeholder="e.g. Nabeul" />
-          </div>
-        </div>
-        <SheetFooter className="mt-4">
-          <button onClick={submit} className="w-full bg-primary text-primary-foreground font-semibold py-3 rounded-xl">Post</button>
-          <SheetClose asChild>
-            <button className="w-full bg-card border border-border font-semibold py-3 rounded-xl text-sm">Cancel</button>
-          </SheetClose>
-        </SheetFooter>
+        <EnhancedShareForm onSubmit={submit} onCancel={()=>setOpen(false)} />
       </SheetContent>
     </Sheet>
   );
 }
+
